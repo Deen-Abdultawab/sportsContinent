@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .transitionItem {
+        transition: all 0.3s linear;
+      }
+
+    footer article h3 {
+        @apply font-Raleway font-[700] leading-[1.5rem] text-[1.25rem] mb-[1.5rem] text-[#000000]
+    }
+
+    footer article li, .copyright, nav .navBtn {
+        @apply font-openSans font-[400] text-[1rem] leading-[1.2rem] mb-[0.75rem] text-[#000000] cursor-pointer
+    }
+
+    .dropdown p {
+        @apply text-[1rem] font-openSans font-[400] leading-[1.2rem]
+    }
+
+    .dropdown .btn, .side_bar .btn {
+        @apply font-openSans font-[600] text-[2rem] leading-[2.6rem] bg-transparent text-white border-none cursor-pointer transitionItem hover:scale-110
+    }
+
+    .side_bar .quantity {
+        @apply font-openSans font-[400] text-[1rem] leading-[1.2rem]
+    }
+
+    .order_details .detail {
+        @apply font-openSans font-[400] text-textCol text-[1rem] leading-[1.2rem]
+    }
+
+    .cost_summary span {
+        @apply font-Raleway font-[700] text-[1rem] leading-[1.2rem]
+    }
+
+    .input_field {
+        @apply flex items-center gap-[2.94rem]
+    }
+
+    .input_field label {
+        @apply max-w-[7.8125rem] w-[7.8125rem] font-Raleway font-[700] text-textCol text-[1rem] leading-[1.2rem]
+    }
+
+    .input_field input, .input_field select {
+        @apply focus:outline-none font-openSans font-[400] text-[#838889] text-[0.875rem] leading-[1.05rem] pb-[0.675rem]
+    }
+
+    .black_btn {
+        @apply rounded-[2000px] text-white bg-textCol py-[1.5rem] px-[8.5rem] font-[500] font-openSans text-[1rem] leading-[1.2rem] transitionItem hover:bg-[#FFFFFF] hover:text-textCol hover:border-textCol border
+    }
+
+    .black_btn:hover svg {
+        color: #000000 !important;
+    }
+
+    .create_account input,  .log_in input, .altSignup, .forget_password input {
+        @apply border border-[#5B5B5B] rounded-[12px] text-[1rem] font-[500] font-openSans leading-[1.5rem] text-[#646464] p-6 focus:outline-none w-full
+    }
+
+    .dashboard-orders .order-headers p {
+        @apply text-[#70706E] font-semibold
+    }
+
+    .dashboard .link {
+        @apply flex items-center gap-[0.5rem] w-full py-[0.97rem] px-[1rem] font-[500] text-[1rem] uppercase cursor-pointer hover:bg-textCol hover:text-white transitionItem rounded-[0.5rem]
+    }
+
+    .dashboard .active {
+        @apply bg-textCol text-[white] shadow-md
+    }
+
+    .altSignup {
+        @apply cursor-pointer gap-[1.125rem]
+    }
+
+    .form-check {
+        @apply w-[15px] h-[15px] border-2 border-[#232321]
+    }
+
+    .dashboard-table thead th {
+        @apply text-[#232321cc] font-[700] text-[1rem]
+    }
+
+    .dashboard-table tbody td, .dashboard-home tbody td span {
+        @apply text-[#000000] font-[700] text-[0.8rem]
+    }
+
+    .orderSummary p {
+        @apply !text-textCol
+    }
+
+    
+
+    .Vue-Toastification__container {
+        @apply z-[999999999999999999999999999] opacity-100
+    }
+
+    .Vue-Toastification__toast {
+        @apply font-Satoshi400;
+      }
+      
+      .Vue-Toastification__toast--error svg {
+        @apply !text-[#E06F6F];
+      }
+      
+      .Vue-Toastification__toast--error {
+        @apply !bg-white !text-black;
+      }
+      
+      .Vue-Toastification__toast--success {
+        @apply !bg-white !text-black;
+      }
+      
+      .Vue-Toastification__toast--success svg {
+        @apply !text-[#D3DA51];
+      }
+
+   
+
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      /* Hide scrollbar for IE, Edge and Firefox */
+      .no-scrollbar {
+          -ms-overflow-style: none;  /* IE and Edge */
+          scrollbar-width: none;  /* Firefox */
+      }
+
+      /* :root {
+        --animate-duration: 800ms;
+        --animate-delay: 0.9s;
+      } */
+}
