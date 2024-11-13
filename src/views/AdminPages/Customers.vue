@@ -1,7 +1,10 @@
 <template>
     <section>
         <dashboardLayout>
-            <section class="p-4 mx-auto dashboard-orders">
+            <div class="min-h-[100vh] h-full w-full grid place-items-center" v-if="isLoading">
+                <loader />
+            </div>
+            <section class="p-4 mx-auto dashboard-orders" v-else>
                 <div>
                     <div class="">
                         <h3 class="text-[#000000] font-[700] text-[1.5rem]">Customers</h3>
@@ -27,11 +30,12 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <!-- {{ customers.data.customers }} -->
                                         <tr 
-                                        v-for="(order, index) in orders" 
+                                        v-for="(customer, index) in customers?.data?.customers" 
                                         :key="index" 
                                         class="text-gray-700 hover:bg-gray-50 transition cursor-pointer"
-                                        @click="routeToDetail"
+                                        @click="routeToDetail(customer?.id)"
                                         >
                                             <td class="p-4 border-b text-center">
                                                 <div class="form-check">
@@ -43,7 +47,7 @@
                                                 </div>
                                             </td> -->
                                             <!-- <td class="p-4 border-b">#{{ order.id }}</td> -->
-                                            <td class="p-4 border-b">{{ order.date }}</td>
+                                            <td class="p-4 border-b">{{ formatDate(customer?.memberSince) }}</td>
                                             <td class="p-4 border-b">
                                                 <div class="flex items-center gap-4">
                                                     <div class="w-8 h-8 rounded-full border border-textCol grid place-items-center">
@@ -54,15 +58,15 @@
                                                     alt="Customer Avatar"
                                                     class="w-8 h-8 rounded-full"
                                                 /> -->
-                                                <span>{{ order.customerName }}</span>
+                                                <span>{{ customer?.fullName }}</span>
                                                 </div>
                                             </td>
                                             <td class="p-4 border-b">
                                                 <div class="flex items-center gap-2">
-                                                <span>{{ order.status }}</span>
+                                                <span>{{ customer?.email }}</span>
                                                 </div>
                                             </td>
-                                            <td class="p-4 border-b text-center">{{ order.amount }}</td>
+                                            <td class="p-4 border-b text-center">{{ customer?.metrics?.totalOrders }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -77,11 +81,19 @@
     
     <script setup>
     import dashboardLayout from "@/components/ui/DashboardLayout.vue"
-    import { ref } from "vue";
+    import { ref, onMounted } from "vue";
     import { useRouter } from "vue-router"
     import orderTable from "@/components/ui/dashboard/OrderTable.vue"
     import userIcon from "@/components/icons/userIcon.vue"
+    import { useAdminStore } from "@/stores/admin";
+    import loader from "@/components/Loader/Loader.vue"
+    import { storeToRefs } from "pinia";
+
     const router = useRouter();
+    const isLoading = ref(false)
+    const adminStore = useAdminStore()
+    const { customers } = storeToRefs(adminStore)
+    const formattedDate = ref('')
 
     const orders = ref([
         { id: '25426', date: 'Nov 8, 2023', customerName: 'Kavin Abba', avatar: 'https://picsum.photos/seed/kavin/50', status: 'kevinabba@gmail.com', amount: 2 },
@@ -92,9 +104,37 @@
         { id: '25421', date: 'Nov 2, 2023', customerName: 'Yoges diharh', avatar: 'https://picsum.photos/seed/yogesh/50', status: 'dhiyo@yahoo.com', amount: 4 },
     ]);
 
-    const routeToDetail = ()=>{
-        router.push({ name: 'customer-detail', params: { slug: 1}})
+    const routeToDetail = (slug)=>{
+        router.push({ name: 'customerDetail', params: { slug }})
     }
+
+    const formatDate = (defaultDate)=>{
+      let date = new Date(defaultDate)
+
+      formattedDate.value = date.toLocaleDateString("en-US", {
+         month: "short", // "Nov"
+         day: "numeric", // "4"
+         year: "numeric" // "2024"
+      });
+
+      return formattedDate.value
+   }
+
+    const handleGetCustomers = async ()=>{
+        isLoading.value = true
+        try {
+            await adminStore.handleGetCustomers()
+            isLoading.value = false
+        } catch (error) {
+            console.log(error)
+            isLoading.value = false
+        }
+    }
+
+    onMounted(async()=>{
+        await handleGetCustomers()
+        console.log(customers.value)
+    })
     
     </script>
     

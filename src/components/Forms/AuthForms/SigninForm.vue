@@ -23,12 +23,12 @@
               <p class="text-center font-[600] font-openSans text-[1rem] leading-[1.2rem] text-[#3B3B3B] my-[2rem] cursor-pointer">Forgot Password?</p>
             </router-link>
 
-            <button class="black_btn mb-[3rem] w-full py-[1rem] px-[auto]">
+            <button class="black_btn mb-[3rem] w-full py-[1rem] px-[auto] hover:!bg-textCol hover:!text-white">
                 <Loader v-if="loading" color="#fffff !important"/>
              <span v-else>Log In</span>
             </button>
         </form>
-        <div>
+        <div class="hidden">
             <div class="flex items-center gap-[1.0625rem]">
                 <span class="flex-1 border border-[#646464]"></span>
                 <h3 class="font-openSans font-[500] text-[1rem] leading-[1.2rem]">Continue with</h3>
@@ -54,7 +54,7 @@
 
 <script setup>
 import { computed, onMounted, reactive, ref, watch } from 'vue';
-import { login, getToken } from '@/services/Auth';
+import { login } from '@/services/Auth';
 import GoogleIcon from '@/components/icons/GoogleIcon.vue';
 import AppleIcon from '@/components/icons/AppleIcon.vue';
 import FacebookIcon from '@/components/icons/FacebookIcon.vue';
@@ -142,6 +142,7 @@ const handleLogin = async ()=>{
     try {
         let res = await login(formState.email, formState.password)
         if(res.status === 200){
+          store.saveUser(res?.data?.user)
           if(res.data.user.role === 'ADMIN'){
             router.push({ name: 'dashboard'})
           } else {

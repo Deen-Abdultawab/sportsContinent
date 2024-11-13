@@ -22,6 +22,19 @@ export const useCurrencyStore = defineStore('currency', ()=>{
           break;
       }
     };
+
+    const getCurrencySymbol = (currencyCode) => {
+      switch (currencyCode) {
+         case 'USD':
+            return '$';
+         case 'GBP':
+            return '£';
+         case 'NGN':
+            return '₦';
+         default:
+            return ''; // Default symbol if currency code is unknown
+      }
+   };
     
     const provideCurrency = () => {
       provide('currencyState', currencyState);

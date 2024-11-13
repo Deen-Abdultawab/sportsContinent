@@ -35,7 +35,7 @@
                     :errorsMsg="errorsMsg?.phone_number"
                     v-model="formData.phone_number"
                     type="tel"
-                    placeholder="Phone Number*"
+                    placeholder="Enter Phone Number with Country Code*"
                     id="tel"
                 />
 
@@ -111,12 +111,12 @@
                     id="confirm_password"
                 />
             </div>
-            <button class="black_btn my-[4rem] w-full py-[1rem] px-[auto]">
+            <button class="black_btn my-[4rem] w-full py-[1rem] px-[auto] hover:!bg-textCol hover:!text-white">
               <Loader v-if="loading"/>
              <span v-else> Create Account</span>
             </button>
         </form>
-        <div>
+        <div class="hidden">
             <div class="flex items-center gap-[1.0625rem]">
                 <span class="flex-1 border border-[#646464]"></span>
                 <h3 class="font-openSans font-[500] text-[1rem] leading-[1.2rem]">Create Account with</h3>
@@ -144,7 +144,7 @@
 
 <script setup>
 import { computed, onMounted, reactive, ref, watch } from 'vue';
-import { registerCustomer, getToken } from '@/services/Auth';
+import { registerCustomer } from '@/services/Auth';
 import GoogleIcon from '@/components/icons/GoogleIcon.vue';
 import AppleIcon from '@/components/icons/AppleIcon.vue';
 import FacebookIcon from '@/components/icons/FacebookIcon.vue';
@@ -300,55 +300,25 @@ const handleSignup = async () => {
         return;
     }
     let payload = {
-        "first_name": formData.firstName,
-        "last_name": formData.lastName,
-        "email": formData.email,
-        "password": formData.password,
-        "phone": formData.phone_number
+      "email": formData.email,
+      "firstName": formData.firstName,
+      "lastName": formData.lastName,
+      "password": formData.password,
+      "phone": formData.phone_number
     }
     try {
-      const res = await medusa.customers.create({
-        first_name: payload.first_name,
-        last_name: payload.last_name,
-        email: payload.email,
-        password: payload.password,
-        phone: payload.phone
-      });
-
-      const customer = res.customer;
-      console.log(customer)
-        // const res = await registerCustomer(payload)
-        if(res.response.statusText === "OK"){
-          const tokenRes = await getToken(payload.email, payload.password)
-
-          let update = await medusa.customers.update({
-            // billing_address: {
-            //     first_name: res?.customer?.first_name || "null",
-            //     last_name: res?.customer?.last_name || "null",
-            //     phone: res?.customer?.phone || "null",
-            // },
-            metadata: {
-              token: tokenRes?.access_token || "null",
-              customer_id: res?.customer?.id || "null",
-              billing_address_id: res?.customer?.billing_address_id || "null",
-              cart_id: "null"
-            }
-          })
-
-          const updatedCustomer = update.customer
-          console.log(updatedCustomer)
-           
-          store.saveUser(updatedCustomer)
-          toast.success("Sucessfully Logged In", {
-            timeout: 4000,
-          });
+        console.log(payload)
+        const res = await registerCustomer(payload)
+        console.log(res)
+        if(res.statusText === "Created"){
+          store.saveUser(res?.data?.user)
           loading.value = false
           router.go(-1)
           return res.data
         }
     } catch (error) {
         console.log(error)
-        toast.error(`${error.response.data.message}`, {
+        toast.error(`${error.response.data.error}`, {
           timeout: 4000,
         });
         loading.value = false

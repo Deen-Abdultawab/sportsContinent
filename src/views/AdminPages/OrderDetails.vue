@@ -1,7 +1,10 @@
 <template>
    <section>
        <dashboardLayout>
-           <section class="p-6 py-8 mx-auto dashboard-orders">
+         <div v-if="isLoading" class="w-full h-full grid place-items-center">
+            <loader />   
+         </div>
+           <section class="p-6 py-8 mx-auto dashboard-orders" v-else>
                <div>
                    <div class="">
                        <h3 class="text-[#000000] font-[700] text-[1.5rem]">Order Info</h3>
@@ -13,16 +16,21 @@
                         <div class="flex items-center justify-between bg-[#FFFFFF] p-4 py-8 rounded-lg shadow mb-4">
                            <div class="flex gap-[1.25rem]">
                               <div>
-                                 <h2 class="text-xl font-semibold mb-[1.25rem]">Order ID: #6743</h2>
-                                 <span class="text-sm text-textCol">Feb 16, 2022</span>
+                                 <h2 class="text-xl font-semibold mb-[1.25rem]">Order ID: #{{ singleOrder?.data?.order?.orderNumber }}</h2>
+                                 <span class="text-sm text-textCol">{{ formatDate(singleOrder?.data?.order?.createdAt) }}</span>
                               </div>
                               <div>
-                                 <span class="p-[0.5rem] text-sm text-textCol font-[600] bg-[#ffa52fcc] rounded-[0.5rem]">{{ orderStatus }}</span>
+                                 <!-- <span class="p-[0.5rem] text-sm text-textCol font-[600] bg-[#ffa52fcc] rounded-[0.5rem]">{{ singleOrder?.status }}</span> -->
+                                 <span
+                                 class="p-[0.5rem] text-sm text-textCol font-[600] rounded-[0.5rem]"
+                                 :class="statusClass(singleOrder?.data?.order?.status)">{{ singleOrder?.data?.order?.status }}</span>
                               </div>
                            </div>
                            <div class="flex items-center gap-2">
                               <div class="border rounded pr-4 bg-[#F4F2F2]">
-                                 <select class="text-textCol font-[500] focus:outline-none bg-inherit p-4 cursor-pointer" v-model="orderStatus">
+                                 <select class="text-textCol font-[500] focus:outline-none bg-inherit p-4 cursor-pointer" v-model="orderStatus"
+                                 @change="handleUpdateStatus(singleOrder?.data?.order?.id)"
+                                 >
                                     <option disabled value="Change Status">Change Status</option>
                                     <option value="Pending">Pending</option>
                                     <option value="Shipped">Shipped</option>
@@ -44,10 +52,10 @@
                               </div>
                               <div class="flex-1">
                                  <h3 class="font-bold mb-2">Customer</h3>
-                                 <p class="text-gray-700">Full Name: Shristi Singh</p>
-                                 <p class="text-gray-700">Email: shristi@gmail.com</p>
-                                 <p class="text-gray-700">Phone: +91 904 231 1212</p>
-                                 <button class="black_btn px-4 py-[0.75rem] rounded-[0.5rem] w-full mt-4" @click="routeToProfile">View profile</button>
+                                 <p class="text-gray-700 capitalize">Full Name: {{ singleOrder?.data?.order?.user?.lastName }} {{ singleOrder?.data?.order?.user?.firstName }}</p>
+                                 <p class="text-gray-700">Email: {{ singleOrder?.data?.order?.user?.email }}</p>
+                                 <p class="text-gray-700">Phone: {{ singleOrder?.data?.order?.user?.phone }}</p>
+                                 <button class="black_btn px-4 py-[0.75rem] rounded-[0.5rem] w-full mt-4" @click="routeToProfile(singleOrder?.data?.order?.user?.id)">View profile</button>
                               </div>
                            </div>
 
@@ -60,9 +68,9 @@
                               </div>
                               <div class="flex-1">
                                  <h3 class="font-bold mb-2">Order Info</h3>
-                                 <p class="text-gray-700">Shipping: Next express</p>
-                                 <p class="text-gray-700">Payment Method: Paypal</p>
-                                 <p class="text-gray-700">Status: {{ orderStatus }}</p>
+                                 <!-- <p class="text-gray-700">Shipping: Not</p> -->
+                                 <p class="text-gray-700">Payment Method: PayStack</p>
+                                 <p class="text-gray-700">Status: {{ singleOrder?.data?.order?.status }}</p>
                                  <!-- <button class="black_btn px-4 py-[0.75rem] rounded-[0.5rem] w-full mt-4">Download Info</button> -->
                               </div>
                            </div>
@@ -76,7 +84,9 @@
                               </div>
                               <div class="flex-1">
                                  <h3 class="font-bold mb-2">Deliver to:</h3>
-                                 <p class="text-gray-700">Address: Dharam Colony, Palam Vihar, Gurgaon, Haryana</p>
+                                 <p class="text-gray-700">Address:
+                                 <br> {{ singleOrder?.data?.order?.shippingAddress?.street }}, {{ singleOrder?.data?.order?.shippingAddress?.city }}, {{ singleOrder?.data?.order?.shippingAddress?.state }}, {{ singleOrder?.data?.order?.shippingAddress?.country }} </p>
+                                 <p class="text-gray-700 mt-[0.5rem]">Postal Code: {{ singleOrder?.data?.order?.shippingAddress?.postalCode }}  </p>
                               </div>
                            </div>
                         </div>
@@ -86,11 +96,11 @@
                            <!-- Payment Info -->
                            <div class="bg-[#FFFFFF] p-4 rounded-lg shadow">
                            <h3 class="font-bold mb-2">Payment Info</h3>
-                           <p class="text-gray-700 flex items-center gap-2">
+                           <!-- <p class="text-gray-700 flex items-center gap-2">
                               <span>💳</span> Master Card **** 6557
-                           </p>
-                           <p class="text-gray-700">Business name: Shristi Singh</p>
-                           <p class="text-gray-700">Phone: +91 904 231 1212</p>
+                           </p> -->
+                           <p class="text-gray-700 capitalize">Business name: {{ singleOrder?.data?.order?.user?.lastName }} {{ singleOrder?.data?.order?.user?.firstName }}</p>
+                           <p class="text-gray-700">Phone: {{ singleOrder?.data?.order?.user?.phone }}</p>
                            </div>
 
                            <!-- Notes -->
@@ -108,29 +118,31 @@
                         <div class="bg-[#FFFFFF] p-4 rounded-lg shadow dashboard-table pb-[4rem]">
                            <h3 class="font-semibold mb-4">Products</h3>
                            <div class="overflow-auto">
-                           <table class="w-full text-left mb-4">
-                              <thead>
-                                 <tr class="text-gray-600 uppercase text-sm">
-                                 <th class="p-4 border-b">Product Name</th>
-                                 <th class="p-4 border-b">Order ID</th>
-                                 <th class="p-4 border-b text-center">Quantity</th>
-                                 <th class="p-4 border-b text-right">Total</th>
-                                 </tr>
-                              </thead>
-                              <tbody>
-                                 <tr v-for="(product, index) in products" :key="index" class="border-b">
-                                 <td class="p-4 flex items-center gap-2">
-                                    <div class="form-check mr-2">
-                                    </div>
-                                    <img :src="product.image" alt="Product Image" class="w-8 h-8 rounded">
-                                    <span class="text-[#000000] font-[700] text-[0.8rem]">{{ product.name }}</span>
-                                 </td>
-                                 <td class="p-4">{{ product.orderId }}</td>
-                                 <td class="p-4 text-center">{{ product.quantity }}</td>
-                                 <td class="p-4 text-right">₹{{ product.total }}</td>
-                                 </tr>
-                              </tbody>
-                           </table>
+                              <table class="w-full text-left mb-4">
+                                 <thead>
+                                    <tr class="text-gray-600 uppercase text-sm">
+                                    <th class="p-4 border-b">Product Name</th>
+                                    <th class="p-4 border-b">Order ID</th>
+                                    <th class="p-4 border-b text-center">Quantity</th>
+                                    <th class="p-4 border-b text-right">Total</th>
+                                    </tr>
+                                 </thead>
+                                 <tbody>
+                                    <tr v-for="(order, index) in singleOrder?.data?.order?.items" :key="order.id" class="border-b">
+                                    <td class="p-4 flex items-center gap-2">
+                                       <div class="form-check mr-2">
+                                       </div>
+                                       <img :src="order?.product?.images[0]" alt="Product Image" class="w-8 h-8 rounded">
+                                       <span class="text-[#000000] font-[700] text-[0.8rem]">{{ order?.product?.name }}</span>
+                                    </td>
+                                    <td class="p-4">#{{ singleOrder?.data?.order?.orderNumber }}</td>
+                                    <td class="p-4 text-center">{{ order?.quantity }}</td>
+                                    <td class="p-4 text-right">
+                                       {{ getCurrencySymbol(order?.product?.currency) }} {{ (order?.price * order?.quantity).toLocaleString() }}
+                                    </td>
+                                    </tr>
+                                 </tbody>
+                              </table>
                            </div>
                            
                            <!-- Summary -->
@@ -138,23 +150,23 @@
                               <div class="text-right w-[20%] flex flex-col gap-[0.5rem] orderSummary">
                                  <div class="flex justify-between">
                                     <p>Subtotal:</p>
-                                    <p>₹3,201.6</p>
+                                    <p>{{ getCurrencySymbol(singleOrder?.data?.order?.currency) }} {{ singleOrder?.data?.order?.total?.toLocaleString() }}</p>
                                  </div>
                                  <div class="flex justify-between">
-                                    <p>Tax (20%):</p>
-                                    <p> ₹640.32</p>
+                                    <p>Tax (0%):</p>
+                                    <p> ₦0</p>
                                  </div>
                                  <div class="flex justify-between">
                                     <p>Discount:</p>
-                                    <p> ₹0</p>
+                                    <p> ₦0</p>
                                  </div>
                                  <div class="flex justify-between">
                                     <p>Shipping Rate:</p>
-                                    <p> ₹0</p>
+                                    <p> ₦0</p>
                                  </div>
                                  <div class="flex justify-between">
                                     <p class="text-xl font-bold">Total:</p>
-                                    <p class="text-xl font-bold"> ₹3,841.92</p>
+                                    <p class="text-xl font-bold"> {{ getCurrencySymbol(singleOrder?.data?.order?.currency) }} {{ singleOrder?.data?.order?.total?.toLocaleString() }}</p>
                                  </div>
                               </div>
                            </div>
@@ -169,16 +181,76 @@
    
    <script setup>
    import dashboardLayout from "@/components/ui/DashboardLayout.vue"
-   import { ref } from "vue";
+   import { ref, onMounted } from "vue";
    import documentIcon from "@/components/icons/Document.vue"
    import userIcon from "@/components/icons/UserIcon.vue"
-   import { useRouter } from "vue-router"
+   import { useRouter, useRoute } from "vue-router"
+   import { storeToRefs } from 'pinia';
+   import { useAdminStore } from "@/stores/admin"
+   import loader from "@/components/Loader/Loader.vue"
 
-   const orderStatus = ref('Pending')
+   const adminStore = useAdminStore()
+   const { singleOrder } = storeToRefs(adminStore)
+   const orderStatus = ref('Change Status')
    const router = useRouter()
+   const route = useRoute()
+   const isLoading = ref(false)
+   const formattedDate = ref('')
 
-   const routeToProfile = ()=> {
-      router.push({ name: 'customer-detail', params: { slug: 1}})
+   const handleSingleStore = async (slug)=>{
+      isLoading.value = true
+      try {
+         await adminStore.handleGetSingleOrder(slug)
+         isLoading.value = false
+      } catch (error) {
+         console.log(error)
+         isLoading.value = false
+      }
+   }
+
+   const handleUpdateStatus = async (slug)=>{
+      isLoading.value = true
+      const payload = {
+         "status": orderStatus.value.toUpperCase()
+      }
+      try {
+         await adminStore.handleOrderStatusUpdate(slug, payload)
+         await handleSingleStore(route.params.slug)
+         orderStatus.value = 'Change Status'
+         isLoading.value = false
+      } catch (error) {
+         console.log(error)
+         isLoading.value = false
+      }
+   }
+
+   const formatDate = (defaultDate)=>{
+      let date = new Date(defaultDate)
+
+      formattedDate.value = date.toLocaleDateString("en-US", {
+         month: "short", // "Nov"
+         day: "numeric", // "4"
+         year: "numeric" // "2024"
+      });
+
+      return formattedDate.value
+   }
+
+   const getCurrencySymbol = (currencyCode) => {
+      switch (currencyCode) {
+         case 'USD':
+            return '$';
+         case 'GBP':
+            return '£';
+         case 'NGN':
+            return '₦';
+         default:
+            return ''; // Default symbol if currency code is unknown
+      }
+   };
+
+   const routeToProfile = (slug)=> {
+      router.push({ name: 'customer-detail', params: { slug }})
    }
    // Mock product data
    const products = ref([
@@ -187,6 +259,23 @@
    { image: 'https://picsum.photos/50?random=3', name: 'Lorem Ipsum', orderId: '#25421', quantity: 2, total: 800.40 },
    { image: 'https://picsum.photos/50?random=4', name: 'Lorem Ipsum', orderId: '#25421', quantity: 2, total: 800.40 }
    ]);
+
+   const statusClass = (status) => {
+      switch (status) {
+         case 'SHIPPED':
+            return 'bg-green-500'
+         case 'PENDING':
+            return 'bg-orange-500'
+         case 'PROCESSING':
+            return 'bg-yellow-400'
+         default:
+            return 'bg-gray-500'
+      }
+   }
+
+   onMounted(async()=>{
+      await handleSingleStore(route.params.slug)
+   })
    
    </script>
    

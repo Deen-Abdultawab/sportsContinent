@@ -6,7 +6,7 @@
   </div>
 </template>
 <script></script>
-<style lang="scss" scoped>
+<style scoped>
 
   .modal {
     top: 0;

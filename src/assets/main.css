@@ -67,7 +67,11 @@
     }
 
     .dashboard .link {
-        @apply flex items-center gap-[0.5rem] w-full py-[0.97rem] px-[1rem] font-[500] text-[1rem] uppercase cursor-pointer hover:bg-textCol hover:text-white transitionItem rounded-[0.5rem]
+        @apply flex items-center gap-[0.5rem] w-full py-[0.97rem] px-[1rem] font-[500] text-[1rem] uppercase cursor-pointer hover:bg-textCol hover:text-white transitionItem rounded-[0.5rem] desk:text-[0.7rem]
+    }
+
+    .dashboard .link h3 {
+        @apply text-[0.9rem]
     }
 
     .dashboard .active {
@@ -135,4 +139,10 @@
         --animate-duration: 800ms;
         --animate-delay: 0.9s;
       } */
+
+      @media (max-width: 1280px){
+        html {
+            font-size: 12.222px !important;
+        }
+      }
 }

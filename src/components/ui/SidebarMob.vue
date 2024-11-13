@@ -42,8 +42,7 @@
             </li>
         </ul>
 
-        <div class="absolute left-0 bottom-4 item-start gap-4 mob:w-full px-4 flex flex-col ">
-                        <!-- <SearchIcon /> -->
+        <!-- <div class="absolute left-0 bottom-4 item-start gap-4 mob:w-full px-4 flex flex-col ">
             <button class="black_btn px-4 py-[0.75rem] rounded-[0.5rem] w-full">
                 Create New Product
             </button>
@@ -51,7 +50,7 @@
                 <h3>Admin</h3>
                 <ArrowDown />
             </div>
-        </div>
+        </div> -->
     </section>
 </template>
 

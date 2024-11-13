@@ -7,7 +7,7 @@
         <div class="animate__animated animate__fadeInLeft animate__slow">
           <h1 class="font-Raleway font-[700] text-[#FFFFFF] text-[3rem] leading-[3.6rem]">Shop easy, Ball hard</h1>
           <p class="font-openSans font-[400] text-[1rem] leading-[1.2rem] text-[#FFFFFF] w-[82%] my-[1.5rem]">Experience the best in sports fashion with SportsContinent. Shop our exclusive range of jerseys, tracksuits, polos, and sport caps. Every piece tells a story.</p>
-          <router-link :to="{name: 'products'}">
+          <router-link :to="{name: 'allProducts'}">
             <button class="bg-[#007646] py-[0.75rem] px-[1rem] rounded-[12.5rem] font-openSans text-[1rem] font-[400] leading-[1.2rem] text-[#FFFFFF] border-0">Shop Now</button>
           </router-link>
         </div>
@@ -21,7 +21,7 @@
         <h3 class="font-Raleway font-[700] text-textCol text-[3rem] leading-[3.6rem] mb-[2.5rem] mob2:text-[2.5rem]">Our Collections</h3>
         <div class="collection_slide_container flex overflow-x-auto gap-[1.5rem] no-scrollbar">
           <article 
-          class="shrink-0 flex flex-col gap-[1.25rem] cursor-pointer"
+          class="shrink-0 flex flex-col gap-[1.25rem] cursor-pointer mob:basis-[70%]"
           v-for="item in collections"
           :key="item.id"
           >
@@ -37,13 +37,16 @@
       </div>
       <div class="featured_products mt-[12.31rem] tab:mt-[6rem] w-[78%] mx-auto tab:w-full">
         <h3 class="font-Raleway font-[700] text-textCol text-[3rem] leading-[3.6rem] mb-[2rem] mob2:text-[2.5rem]">Featured Products</h3>
-        <div class="featured_products_container grid grid-cols-customGrid2 gap-[1.5rem] tab:grid-cols-customGrid3">
-          <!-- <ProductCard 
-          v-for="(item, index) in featuredProducts"
+        <div class="w-full h-full grid place-items-center" v-if="isLoading">
+          <loader />
+        </div>
+        <div class="featured_products_container grid grid-cols-customGrid2 gap-[1.5rem] tab:grid-cols-customGrid3" v-else>
+          <ProductCard 
+          v-for="(item, index) in featuredProducts.slice(0,3)"
           :key="item.id"
           :product="item"
-          @click="routeToProductDetails(item.id)"
-          /> -->
+          @click="routeToProductDetails(item?.id)"
+          />
         </div>
       </div>
     </main>
@@ -58,31 +61,45 @@ import mainbg from "@/assets/images/header_img.png"
 import RightArrowIcon from "@/components/icons/RightArrowIcon.vue";
 import ProductCard from "@/components/ui/ProductCard.vue";
 const image = mainbg
+import { useAdminStore } from '@/stores/admin';
 import { storeToRefs } from "pinia";
 import { useProductsStore } from "@/stores/products"
 import { onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { ref, watch } from "vue"
+import loader from "@/components/Loader/Loader.vue"
 
-const productStore = useProductsStore()
-const { allProducts, featuredProducts } = storeToRefs(productStore)
+const adminStore = useAdminStore()
+const { featuredProducts, currentCurrency } = storeToRefs(adminStore)
 const router = useRouter()
+const isLoading = ref(false)
 
-const getAllProducts = async ()=>{
-    try {
-        await productStore.handleAllProducts()
-        productStore.getFeaturedProducts()
-        console.log(featuredProducts.value)
-    } catch (error) {
-        console.log(error)
-    }
+const handleGetFeaturedProducts = async ()=>{
+  isLoading.value = true
+  try {
+    await adminStore.handleGetProducts(1, currentCurrency.value)
+    await adminStore.getFeaturedProducts()
+    isLoading.value = false
+  } catch (error) {
+    console.log(error)
+    isLoading.value = false
+  }
 }
 
-const routeToProductDetails = (id)=>{
-    router.push({ name: 'product_detail', params: { slug: id}})
+watch(currentCurrency, async (newCurrency) => {
+  await adminStore.updateCurrency(newCurrency);
+  await handleGetFeaturedProducts();
+});
+
+const routeToProductDetails = (slug)=>{
+  console.log(slug)
+    router.push({ name: 'product_detail', params: { slug}})
 }
 
 onMounted(async () => {
-    getAllProducts()
+  await adminStore.getCurrency()
+  await adminStore.updateCurrency(currentCurrency.value)
+  await handleGetFeaturedProducts()
 })
 
 const collections = [

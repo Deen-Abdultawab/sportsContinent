@@ -1,4 +1,4 @@
-import {apiClient} from "../axios";
+import axios from "../axios";
 import { catchAxiosError, catchAxiosSuccess } from "./Response"
 import { encrypt, decrypt } from "./Encrypt"
 import Medusa from '@medusajs/medusa-js';
@@ -12,7 +12,12 @@ const medusa = new Medusa({
 
 export const registerCustomer = async (payload)=>{
     try {
-        let res = apiClient.post(`store/customers`, payload)
+      let res = await axios.post(`auth/signup`, payload, {
+        headers: {
+            'Content-Type': 'application/json',
+            "Accept": "application/json"
+        }
+      })
         let ciphertext = encrypt(JSON.stringify(payload), import.meta.env.VITE_ENCRYPT_KEY)
         localStorage.setItem('_register_data', ciphertext);
         catchAxiosSuccess(res)
@@ -23,15 +28,13 @@ export const registerCustomer = async (payload)=>{
     }
 }
 
-
-
 export const login = async (email, password) => {
     let data = {
       email,
       password,
     }
     try {
-      let res = await apiClient.post('auth/login', data, {
+      let res = await axios.post('auth/login', data, {
         headers: {
             'Content-Type': 'application/json',
             "Accept": "application/json"
@@ -45,36 +48,9 @@ export const login = async (email, password) => {
     }
 }
 
-export const getToken = async (email, password)=>{
-    let data = {
-        email,
-        password,
-    }
-    try {
-        let res = await apiClient.post(`store/auth/token`, data, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        console.log(res.data)
-        return res.data
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-export const useToken = ()=>{
-    const encryptedData = localStorage.getItem("_user_data");
-    if (encryptedData) {
-      const user = decrypt(encryptedData, import.meta.env.VITE_ENCRYPT_KEY);
-      return user?.token || null;
-    }
-    return null;
-}
-
 export const logout = async ()=>{
   try {
-    let res = await apiClient.post('auth/logout', {
+    let res = await axios.post('auth/logout', {
       headers: {
         'Content-Type': 'application/json',
       }

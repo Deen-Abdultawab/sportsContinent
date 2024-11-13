@@ -1,40 +1,31 @@
-// import axios from "axios";
-// import { useRouter } from "vue-router";
-axios.defaults.baseURL = import.meta.env.VITE_BACKEND_BASEURL
-// import { useToast } from 'vue-toastification'
+import axios from "axios";
+import { useRouter } from "vue-router";
+import { useToast } from 'vue-toastification';
 
-// const toast = useToast()
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_BASEURL;
+axios.defaults.withCredentials = true; // Enable credentials for all axios requests
 
+const toast = useToast();
+const router = useRouter();
 
-// /*
-//  Axios Interceptor to log user out
-// */
+/*
+ Axios Interceptor to log user out
+*/
 
-// axios.interceptors.response.use(
-//     (response) => {
-//       return response;
-//     },
-//     (error) => {
-//         if (error?.response?.status === 401) {
-//               toast.error(error?.response?.data?.message, {
-//                 timeout: 4000
-//               })
-//             localStorage.clear();
-//             useRouter.push('/login')
-//         }
-//         return Promise.reject(error);
-//     }
-//   );
+axios.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error?.response?.status === 401) {
+      toast.error(error?.response?.data?.message, {
+        timeout: 4000
+      });
+      localStorage.clear();
+      router.push('/admin');
+    }
+    return Promise.reject(error);
+  }
+);
 
-export default axios
-
-
-
-import axios from 'axios';
-
-export const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_BASEURL,
-  withCredentials: true, 
-});
-
-
+export default axios;

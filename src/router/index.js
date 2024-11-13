@@ -16,7 +16,7 @@ const router = createRouter({
     },
     {
       path: '/products',
-      name: 'products',
+      name: 'allProducts',
       component: () => import('../views/Products/ProductsPage.vue')
     },
     {
@@ -56,7 +56,7 @@ const router = createRouter({
     },
     {
       path: '/admin/create',
-      name: 'new-product',
+      name: 'newProduct',
       component: () => import('../views/AdminPages/CreateProducts.vue')
     },
     {
@@ -76,7 +76,7 @@ const router = createRouter({
     },
     {
       path: '/admin/customers/:slug',
-      name: 'customer-detail',
+      name: 'customerDetail',
       component: () => import('../views/AdminPages/CustomerDetails.vue')
     },
     {
@@ -86,8 +86,18 @@ const router = createRouter({
     },
     {
       path: '/admin/products/:slug',
-      name: 'product-details',
+      name: 'productDetails',
       component: () => import('../views/AdminPages/ProductDetails.vue')
+    },
+    {
+      path: '/payment-success',
+      name: 'paymentSuccessful',
+      component: () => import('../views/Payments/PaymentSuccess.vue')
+    },
+    {
+      path: '/payment-failure',
+      name: 'paymentFailed',
+      component: () => import('../views/Payments/PaymentFailure.vue')
     },
   ]
 })

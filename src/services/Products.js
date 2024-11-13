@@ -26,3 +26,12 @@ export const getSingleProducts = async (product_id)=>{
         console.log(error)
     }
 }
+
+export const getFeaturedProducts = async ()=>{
+    try {
+        let res = await axios.get('products/featured')
+        return res.data
+    } catch (error) {
+        console.log(error)
+    }
+}
