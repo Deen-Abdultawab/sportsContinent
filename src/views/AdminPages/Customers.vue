@@ -83,8 +83,7 @@
     import dashboardLayout from "@/components/ui/DashboardLayout.vue"
     import { ref, onMounted } from "vue";
     import { useRouter } from "vue-router"
-    import orderTable from "@/components/ui/dashboard/OrderTable.vue"
-    import userIcon from "@/components/icons/userIcon.vue"
+    import userIcon from "@/components/icons/UserIcon.vue"
     import { useAdminStore } from "@/stores/admin";
     import loader from "@/components/Loader/Loader.vue"
     import { storeToRefs } from "pinia";
