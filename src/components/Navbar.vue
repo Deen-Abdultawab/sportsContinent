@@ -102,7 +102,7 @@
                         <p 
                         v-if="!cartItems?.cart?.items?.length > 0"
                         class="text-right font-openSans font-[500] text-[1.5rem] leading-[1.675rem]">Your bag is empty at the moment</p>
-                        <div v-else class="flex flex-col gap-8 py-4">
+                        <div v-else class="flex flex-col gap-8">
                             <div 
                             class="flex gap-[1.25rem]"
                             v-for="(item, index) in cartItems?.cart?.items"
@@ -114,7 +114,7 @@
                                 <div class="flex-1 flex justify-between">
                                     <div class="flex flex-col justify-between">
                                         <h3 class="font-Raleway font-[700] text-[0.7rem] leading-[1.2rem]">{{ item?.product?.name }}</h3>
-                                        <Counter :default="item?.quantity" @update:initValue="handleUpdatedValue($event, item?.product?.id, item?.id)"/>
+                                        <Counter :default="item?.quantity" @update:initValue="handleUpdatedValue($event, item?.product?.id)"/>
                                     </div>
                                     <div class="flex flex-col justify-between">
                                         <span class="font-openSans font-[400] text-[0.7rem] leading-[1.2rem]">{{ currencyState.symbol }}{{ item?.price?.toLocaleString() }}</span>
@@ -151,8 +151,8 @@
 <script setup>
 import CloseIcon from '@/components/icons/CloseIcon.vue';
 import { useCurrencyStore } from '@/stores/currency';
-import { onMounted, ref } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { computed, onMounted, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import Counter from '@/components/Counter.vue';
 import { userStore } from '@/stores/user';
 import { logout } from '@/services/Auth';
@@ -170,12 +170,12 @@ const toast = useToast();
 const store = userStore()
 const { user } = storeToRefs(store)
 const currencyStore = useCurrencyStore()
-const { currencyState } = currencyStore.useCurrency();
+const { currencyState, updateCurrencyState } = currencyStore.useCurrency();
 const { cartItems, cartCount } = storeToRefs(cartStore)
 const showNavDropDown = ref(false);
 const showBag = ref(false);
 const router = useRouter()
-const route = useRoute()
+const quantity = ref(0)
 const isRemoving = ref(false)
 
 const handleCurrencyChange =async () => {
@@ -196,12 +196,7 @@ const handleLogout = async () =>{
             localStorage.removeItem('_user_data')
         }
         cartCount.value = 0
-        cartItems.value.cart.items = []
-        if(route.name === "home"){
-            router.push({ name: "signin" });
-        } else {
-            router.push({ name: "home" });
-        }
+        router.push({ name: "home" });
     } catch (error) {
         console.log(error)
     }
@@ -246,8 +241,8 @@ const handleCloseBag = ()=>{
     showBag.value = false
 }
 
-const handleUpdatedValue = async (newValue, item_id, id) => {
-    if(newValue > 0){
+const handleUpdatedValue = async (newValue, item_id) => {
+    if(newValue){
         isRemoving.value = true
         let payload = {
             "quantity": newValue
@@ -262,8 +257,6 @@ const handleUpdatedValue = async (newValue, item_id, id) => {
             console.log(error)
             isRemoving.value = false
         }
-    } else {
-        await handleRemoveItem(id)
     }
 };
 
@@ -287,6 +280,8 @@ onMounted( async () => {
     if(user.value){
         await cartStore.handleGetCart()
         cartStore.updateCartCount()
+    } else {
+        console.log(cartCount.value)
     }
 
     const storedCurrency = localStorage.getItem('currency');
