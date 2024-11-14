@@ -154,7 +154,6 @@
       let res = await cartStore.handleAddItemToCart(payload)
       await cartStore.handleGetCart()
       await cartStore.updateCartCount()
-      console.log(cartItems.value, cartCount.value)
       isCartLoading.value = false
       return res
     } catch (error) {
@@ -165,7 +164,6 @@
 
   const handleAddToCart = async(slug)=>{
     await store.getUser()
-    console.log(user.value)
     if(user.value){
       if(selectedSize.value !== "default" && quantity.value > 0){
         let payload = {
@@ -173,11 +171,10 @@
           "quantity": quantity.value,
           "size": selectedSize.value
         }
-        console.log(payload)
         let res = await addToCart(payload)
         await cartStore.handleGetCart()
         await cartStore.updateCartCount()
-        if(res?.statusText === "OK"){
+        if(res.statusText === "OK"){
           toast.success("item added to cart successfully", {
             timeout: 4000,
           });
@@ -225,7 +222,6 @@
   onMounted(async()=>{
       await adminStore.getCurrency()
       await adminStore.updateCurrency(currentCurrency.value)
-      console.log(currentCurrency.value)
       await handleGetSingleProduct(route.params.slug, currentCurrency.value)
       setUrl(singleProduct.value.images[0])
       await handleGetFeaturedProducts()

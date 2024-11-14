@@ -195,7 +195,8 @@ const handleLogout = async () =>{
         if (localStorage.getItem('_user_data')) {
             localStorage.removeItem('_user_data')
         }
-        router.push({ name: "signin" });
+        cartCount.value = 0
+        router.push({ name: "home" });
     } catch (error) {
         console.log(error)
     }
@@ -247,10 +248,8 @@ const handleUpdatedValue = async (newValue, item_id) => {
             "quantity": newValue
         }
         try {
-            console.log(payload, item_id)
             await cartStore.handleUpdateCart(item_id, payload)
             await cartStore.handleGetCart()
-            console.log(cartItems.value)
             await cartStore.updateCartCount()
             isRemoving.value = false
             handleCloseBag()
@@ -281,7 +280,6 @@ onMounted( async () => {
     if(user.value){
         await cartStore.handleGetCart()
         cartStore.updateCartCount()
-        console.log(cartItems.value?.cart?.items)
     } else {
         console.log(cartCount.value)
     }

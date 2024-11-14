@@ -146,7 +146,7 @@ const handleLogin = async ()=>{
           if(res?.data?.user?.role === 'ADMIN'){
             router.push({ name: 'dashboard'})
           } else {
-            router.push({ name: 'home'})
+            router.go(-1)
           }
         }
         loading.value = false
