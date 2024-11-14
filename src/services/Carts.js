@@ -25,7 +25,7 @@ export const addToCart = async (payload)=>{
                 "Accept": "application/json"
             }
         })
-        catchAxiosSuccess(res.data)
+        catchAxiosSuccess(res)
         return res
     } catch (error) {
         console.log(error)
@@ -51,7 +51,7 @@ export const deleteCart = async ()=>{
 export const updateCart = async (slug, payload)=>{
     try {
         let res = await axios.put(`cart/${slug}`, payload)
-        catchAxiosSuccess(res.data)
+        catchAxiosSuccess(res)
         return res.data
     } catch (error) {
         console.log(error)
