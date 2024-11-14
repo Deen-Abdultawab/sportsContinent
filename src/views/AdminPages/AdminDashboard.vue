@@ -57,7 +57,7 @@ import { storeToRefs } from 'pinia';
 import { useRouter } from "vue-router";
 import orderTable from "@/components/ui/dashboard/OrderTable.vue"
 import { useAdminStore } from "@/stores/admin";
-import loader from "@/components/Loader/shortLoader.vue"
+import loader from "@/components/Loader/ShortLoader.vue"
 
 const router = useRouter()
 const adminStore = useAdminStore()
