@@ -150,7 +150,6 @@ const handleLogin = async ()=>{
           }
         }
         loading.value = false
-        console.log(res)
     } catch (error) {
         console.log(error)
         toast.error("incorrect login credentials", {
