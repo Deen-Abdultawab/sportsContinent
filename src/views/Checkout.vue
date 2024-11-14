@@ -263,21 +263,21 @@ const handleCheckout = async ()=>{
         if(formData.address.length > 0 && formData.city.length > 0 && formData.state.length > 0 && formData.country.length > 0 && formData.zip_code.length > 0 && formData.email.length > 0) {
             let res = await adminStore.handleCreateOrders(payload)
             console.log(res)
-            let payload = {
-                "orderId": res.data?.order?.id,
-                "email": formData.email,
-                "amount": res.data?.order?.total
+            if(res.status === 201 ){
+                let payload = {
+                    "orderId": res.data?.order?.id,
+                    "email": formData.email,
+                    "amount": res.data?.order?.total
+                }
+                let paymentRes = await adminStore.handleMakePayments(payload)
+                console.log(paymentRes)
+                if(paymentRes?.authorization_url){
+                    window.location.href = paymentRes?.authorization_url;
+                }
+            } else {
+                isLoading.value = false
+                return
             }
-            let paymentRes = await adminStore.handleMakePayments(payload)
-            console.log(paymentRes)
-            if(paymentRes?.authorization_url){
-                window.location.href = paymentRes?.authorization_url;
-            }
-            // if(res.status === 201 ){
-            // } else {
-            //     isLoading.value = false
-            //     return
-            // }
             isLoading.value = false
         } else {
             toast.error("billing address not complete", {
