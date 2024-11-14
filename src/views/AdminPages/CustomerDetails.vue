@@ -120,21 +120,17 @@
         }
     }
 
-    const formatDate = (defaultDate)=>{
+    const formatDate = (defaultDate) => {
       let date = new Date(defaultDate)
-
-      formattedDate.value = date.toLocaleDateString("en-US", {
-         month: "short", // "Nov"
-         day: "numeric", // "4"
-         year: "numeric" // "2024"
-      });
-
-      return formattedDate.value
-   }
+      return date.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric"
+      })
+  }
 
     onMounted(async()=>{
         await handleGetSingleCustomer(route.params.slug)
-        console.log(singleCustomer.value)
     })
     
     </script>

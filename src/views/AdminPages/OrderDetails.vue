@@ -22,7 +22,7 @@
                               <div>
                                  <!-- <span class="p-[0.5rem] text-sm text-textCol font-[600] bg-[#ffa52fcc] rounded-[0.5rem]">{{ singleOrder?.status }}</span> -->
                                  <span
-                                 class="p-[0.5rem] text-sm text-textCol font-[600] rounded-[0.5rem]"
+                                 class="p-[0.5rem] text-sm text-white font-[600] rounded-[0.5rem]"
                                  :class="statusClass(singleOrder?.data?.order?.status)">{{ singleOrder?.data?.order?.status }}</span>
                               </div>
                            </div>
@@ -44,7 +44,7 @@
                         <!-- Info Sections -->
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                            <!-- Customer Info -->
-                           <div class="bg-[#FFFFFF] p-4 rounded-lg shadow flex gap-4">
+                           <div class="bg-[#FFFFFF] p-4 rounded-lg shadow flex flex-wrap gap-4">
                               <div>
                                  <div class="bg-textCol rounded-[0.5rem] p-4">
                                     <userIcon class="text-[white]"/>
@@ -224,17 +224,14 @@
       }
    }
 
-   const formatDate = (defaultDate)=>{
+   const formatDate = (defaultDate) => {
       let date = new Date(defaultDate)
-
-      formattedDate.value = date.toLocaleDateString("en-US", {
-         month: "short", // "Nov"
-         day: "numeric", // "4"
-         year: "numeric" // "2024"
-      });
-
-      return formattedDate.value
-   }
+      return date.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric"
+      })
+  }
 
    const getCurrencySymbol = (currencyCode) => {
       switch (currencyCode) {

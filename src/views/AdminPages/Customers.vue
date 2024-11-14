@@ -107,17 +107,14 @@
         router.push({ name: 'customerDetail', params: { slug }})
     }
 
-    const formatDate = (defaultDate)=>{
-      let date = new Date(defaultDate)
-
-      formattedDate.value = date.toLocaleDateString("en-US", {
-         month: "short", // "Nov"
-         day: "numeric", // "4"
-         year: "numeric" // "2024"
-      });
-
-      return formattedDate.value
-   }
+    const formatDate = (defaultDate) => {
+        let date = new Date(defaultDate)
+        return date.toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric"
+        })
+    }
 
     const handleGetCustomers = async ()=>{
         isLoading.value = true
@@ -132,7 +129,6 @@
 
     onMounted(async()=>{
         await handleGetCustomers()
-        console.log(customers.value)
     })
     
     </script>
