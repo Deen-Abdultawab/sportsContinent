@@ -8,11 +8,11 @@
           <h1 class="font-Raleway font-[700] text-[#FFFFFF] text-[3rem] leading-[3.6rem]">Shop easy, Ball hard</h1>
           <p class="font-openSans font-[400] text-[1rem] leading-[1.2rem] text-[#FFFFFF] w-[82%] my-[1.5rem]">Experience the best in sports fashion with SportsContinent. Shop our exclusive range of jerseys, tracksuits, polos, and sport caps. Every piece tells a story.</p>
           <router-link :to="{name: 'allProducts'}">
-            <button class="bg-[#007646] py-[0.75rem] px-[1rem] rounded-[12.5rem] font-openSans text-[1rem] font-[400] leading-[1.2rem] text-[#FFFFFF] border-0">Shop Now</button>
+            <button class="bg-[#007646] py-[0.75rem] px-[1.5rem] rounded-[12.5rem] font-openSans text-[1.2rem] font-[400] leading-[1.2rem] mob:py-[0.9rem] mob:w-[50%] text-[#FFFFFF] border-0">Shop Now</button>
           </router-link>
         </div>
         <a href="https://wa.me/+2348138726068" target="_blank">
-          <img src="../assets/images/whatsapp_logo.png" alt="" class="absolute bottom-[3.75rem] right-[9.75rem] cursor-pointer hover:scale-105 transitionItem tab2:right-[2rem]">
+          <img src="../assets/images/whatsapp_logo.png" alt="" class="fixed mob:top-[50rem] bottom-[3.75rem] right-[9.75rem] cursor-pointer hover:scale-105 transitionItem tab2:right-[2rem]">
         </a>
       </div>
     </header>
