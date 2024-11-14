@@ -1,13 +1,6 @@
 import axios from "../axios";
 import { catchAxiosError, catchAxiosSuccess } from "./Response"
 import { encrypt, decrypt } from "./Encrypt"
-import Medusa from '@medusajs/medusa-js';
-
-const medusa_url = import.meta.env.VITE_BACKEND_BASEURL
-const medusa = new Medusa({ 
-    baseUrl: medusa_url, 
-    maxRetries: 3 
-})
 
 
 export const registerCustomer = async (payload)=>{
@@ -84,14 +77,14 @@ export const logout = async ()=>{
 //   }
 // }
 
-export const requestPasswordResetToken = async (payload)=>{
-  try {
-    let res = await medusa.customers.generatePasswordToken({
-      email: payload
-    })
-    return res
-  } catch (error) {
-    console.log(error)
-  }
+export const requestPasswordResetToken = async ()=>{
+  // try {
+  //   let res = await medusa.customers.generatePasswordToken({
+  //     email: payload
+  //   })
+  //   return res
+  // } catch (error) {
+  //   console.log(error)
+  // }
 }
 

@@ -246,17 +246,17 @@
          return;
      }
      try {
-         const res = await medusa.customers.resetPassword({
-            email: formState.email,
-            password: formState.password,
-            token: token,
-          })
+        //  const res = await medusa.customers.resetPassword({
+        //     email: formState.email,
+        //     password: formState.password,
+        //     token: token,
+        //   })
           
-         if(res.response.statustext === "OK"){
-             toast.success("Password Successfully Updated", {
-             timeout: 4000,
-           });
-         }
+        //  if(res.response.statustext === "OK"){
+        //      toast.success("Password Successfully Updated", {
+        //      timeout: 4000,
+        //    });
+        //  }
          loading.value = false
      } catch (error) {
          console.log(error)

@@ -162,7 +162,6 @@ import { useCartStore } from '@/stores/cart';
 import { useCurrencyStore } from '@/stores/currency';
 import Loader from "@/components/Loader/WhiteLoader.vue"
 import loader from "@/components/Loader/Loader.vue"
-import Medusa from '@medusajs/medusa-js';
 import { useToast } from "vue-toastification";
 import axios from "axios";
 import CenteredModalLarge from "@/components/ui/CenteredModalLarge.vue"
@@ -208,41 +207,7 @@ const formData = reactive({
 const updateShippingInfo = async ()=>{
     loading.value = true
     try {
-        let update = await medusa.customers.update({
-            billing_address: {
-                first_name: formData.firstName || "null",
-                last_name: formData.lastName || "null",
-                postal_code: formData.zip_code || "null",
-                province: formData.state || "null",
-                city: formData.city || "null",
-                address_1: formData.address || "null",
-                metadata: {
-                    country: formData.country || "null",
-                    email: formData.email || "null"
-                }
-            },
-        })
-        console.log(update)
-        const updatedCustomer = update.customer
-        if(update.response.statusText === "OK"){
-            store.saveUser(updatedCustomer)
-            await cartStore.handleUpdateCart(user.value?.metadata?.cart_id, {
-                shipping_address: {
-                    first_name: formData.firstName || "null",
-                    last_name: formData.lastName || "null",
-                    address_1: formData.address || "null",
-                    city: formData.city || "null",
-                    // country_code,
-                    province: formData.state || "null",
-                    postal_code: formData.state || "null",
-                    // phone,
-                },
-            })
-            toast.success("Sucessfully Logged In", {
-                timeout: 4000,
-            });
-            loading.value = false
-        }
+       console.log('try')
     } catch (error) {
         console.log(error)
         loading.value = false

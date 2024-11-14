@@ -156,7 +156,6 @@ import { useRouter } from 'vue-router';
 import { useToast } from "vue-toastification";
 import { userStore } from '@/stores/user';
 import { useUserProfile } from '@/stores/profile';
-import Medusa from '@medusajs/medusa-js';
 
 
 const userProfile = useUserProfile();
@@ -166,12 +165,7 @@ const toast = useToast();
 const loading = ref(false)
 const confirmPassword = ref("");
 const router = useRouter()
-const medusa_url = import.meta.env.VITE_BACKEND_BASEURL
 const authPath = 'store/auth/google'
-const medusa = new Medusa({ 
-  baseUrl: medusa_url, 
-  maxRetries: 3 
-})
 
 
 const formData = reactive({

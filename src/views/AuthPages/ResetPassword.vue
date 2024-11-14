@@ -113,15 +113,15 @@ const handleRequestToken = async ()=>{
         return;
     }
     try {
-        const res = await medusa.customers.generatePasswordToken({
-            email: formState.email
-        })
+        // const res = await medusa.customers.generatePasswordToken({
+        //     email: formState.email
+        // })
 
-        if(res.response.statustext === "OK"){
-            toast.success("A reset mail has been sent to you, endeavour to wait a few minute and check spam mails", {
-            timeout: 4000,
-          });
-        }
+        // if(res.response.statustext === "OK"){
+        //     toast.success("A reset mail has been sent to you, endeavour to wait a few minute and check spam mails", {
+        //     timeout: 4000,
+        //   });
+        // }
         loading.value = false
     } catch (error) {
         console.log(error)

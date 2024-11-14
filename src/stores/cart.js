@@ -1,6 +1,5 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import Medusa from '@medusajs/medusa-js';
 import axios from "axios";
 import { 
     getCart,

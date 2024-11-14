@@ -10,7 +10,6 @@
     "test:unit": "vitest"
   },
   "dependencies": {
-    "@medusajs/medusa-js": "^6.1.9",
     "@paystack/inline-js": "^2.22.0",
     "animate.css": "^4.1.1",
     "axios": "^1.7.5",

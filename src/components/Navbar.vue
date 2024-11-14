@@ -159,7 +159,7 @@ import { userStore } from '@/stores/user';
 import { logout } from '@/services/Auth';
 import { useToast } from "vue-toastification";
 import { storeToRefs } from "pinia";
-import Medusa from '@medusajs/medusa-js';
+
 import { useCartStore } from '@/stores/cart';
 import { useAdminStore } from "@/stores/admin"
 import loader from "@/components/Loader/ShortLoader.vue"
