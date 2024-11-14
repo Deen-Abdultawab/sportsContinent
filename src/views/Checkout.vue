@@ -50,12 +50,12 @@
                     <article class="flex w-full items-center gap-[1.15rem] mb-[1.25rem]">
                         <span class="">Shipping</span>
                         <span class="flex-1 bg-textCol border border-textCol h-0"></span>
-                        <span class="">Calculating...</span>
+                        <span class="">₦ 8,000</span>
                     </article>
                     <article class="flex w-full items-center gap-[1.15rem] mb-[1.25rem]">
                         <span class="">Total</span>
                         <span class="flex-1 bg-textCol border border-textCol h-0"></span>
-                        <span class="">₦{{ cartItems?.cart?.total?.toLocaleString() }}</span>
+                        <span class="">₦{{ (cartItems?.cart?.total + 8000).toLocaleString() }}</span>
                     </article>
                 </div>
             </div>

@@ -108,7 +108,6 @@
                             v-for="(item, index) in cartItems?.cart?.items"
                             :key="item.id"
                             > 
-                            {{ item.quantity }}
                                 <div class="w-[5rem] h-[5rem] overflow-hidden">
                                     <img :src="item?.product?.images[0]" alt="product image" class="object-contain">
                                 </div>

@@ -14,8 +14,8 @@
                      <div class="order-headers">
                         <!-- Order Header -->
                         <div class="flex items-center justify-between bg-[#FFFFFF] p-4 py-8 rounded-lg shadow mb-4">
-                           <div class="flex gap-[1.25rem]">
-                              <div>
+                           <div class="flex gap-[1.25rem] mob:flex-col">
+                              <div class="mob:order-2">
                                  <h2 class="text-xl font-semibold mb-[1.25rem]">Order ID: #{{ singleOrder?.data?.order?.orderNumber }}</h2>
                                  <span class="text-sm text-textCol">{{ formatDate(singleOrder?.data?.order?.createdAt) }}</span>
                               </div>
@@ -147,7 +147,7 @@
                            
                            <!-- Summary -->
                            <div class="flex justify-end mt-4">
-                              <div class="text-right w-[20%] flex flex-col gap-[0.5rem] orderSummary">
+                              <div class="text-right w-[20%] mob:w-[50%] flex flex-col gap-[0.5rem] orderSummary">
                                  <div class="flex justify-between">
                                     <p>Subtotal:</p>
                                     <p>{{ getCurrencySymbol(singleOrder?.data?.order?.currency) }} {{ singleOrder?.data?.order?.total?.toLocaleString() }}</p>
