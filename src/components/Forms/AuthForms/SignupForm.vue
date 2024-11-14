@@ -302,12 +302,11 @@ const handleSignup = async () => {
     }
     try {
         const res = await registerCustomer(payload)
-        console.log(res)
-        if(res.statusText === "Created"){
-          store.saveUser(res?.data?.user)
-          loading.value = false
-          router.go(-1)
-          return res.data
+        store.saveUser(res?.data?.user)
+        loading.value = false
+        router.go(-1)
+        if(res?.statusText === "Created"){
+          console.log('signedup')
         }
     } catch (error) {
         console.log(error)
