@@ -81,7 +81,6 @@ const routeToProduct = (slug)=> {
 
 onMounted( async ()=>{
     await getAnalytics()
-    // console.log(analytics.value)
 })
 
 </script>

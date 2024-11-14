@@ -11,7 +11,6 @@ export const userStore = defineStore('user', ()=>{
 
     const saveUser = (userData) => {
         user.value = userData
-        console.log(user.value)
         let ciphertext = encrypt(JSON.stringify(user.value), import.meta.env.VITE_ENCRYPT_KEY)
         localStorage.setItem('_user_data', ciphertext)
     }
@@ -30,7 +29,6 @@ export const userStore = defineStore('user', ()=>{
         try {
             let res = await axios.get(`https://countriesnow.space/api/v0.1/countries/states`)
             countries.value = res.data
-            console.log(countries.value)
             return countries.value
         } catch (error) {
             console.log(error)
@@ -46,7 +44,6 @@ export const userStore = defineStore('user', ()=>{
                 }
             })
             states.value = res.data
-            console.log(res)
             return states.value
         } catch (error) {
             console.log(error)

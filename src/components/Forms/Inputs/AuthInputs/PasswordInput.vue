@@ -5,7 +5,7 @@
         @input="$emit('update:modelValue', $event.target.value)"
         :placeholder="placeholder"
         :value="modelValue"
-        :class="error ? 'border-[#ef4b4b]' : 'border-[#254035]'"
+        :class="error ? 'border-[#DA5252]' : 'reg'"
       />
       <div class="absolute right-4 top-[50%] translate-y-[-50%] text-[#D1D1D6]">
         <button type="button" @click="toggleShowPassword()" v-if="showPassword">

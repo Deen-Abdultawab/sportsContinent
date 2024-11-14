@@ -65,7 +65,6 @@ export const useUserProfile = defineStore('profile', ()=>{
 
         try {
             let res = await updateCustomer(payload)
-            console.log(res)
             return res
         } catch (error) {
             console.log(error)

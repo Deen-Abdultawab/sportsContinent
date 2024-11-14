@@ -8,7 +8,6 @@ export const getCustomer = async () => {
                 'Content-Type': 'application/json',
             }
         })
-        console.log(res)
         return res.data
     } catch (error) {
         catchAxiosError(error)

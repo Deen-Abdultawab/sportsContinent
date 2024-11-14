@@ -143,7 +143,7 @@ const handleLogin = async ()=>{
         let res = await login(formState.email, formState.password)
         if(res.status === 200){
           store.saveUser(res?.data?.user)
-          if(res.data.user.role === 'ADMIN'){
+          if(res?.data?.user?.role === 'ADMIN'){
             router.push({ name: 'dashboard'})
           } else {
             router.push({ name: 'home'})

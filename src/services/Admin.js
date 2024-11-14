@@ -3,14 +3,11 @@ import { catchAxiosError, catchAxiosSuccess } from './Response'
 
 export const getAnalytics = async ()=>{
     try {
-        let res = await axios.get('analytics' , {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
+        let res = await axios.get('analytics')
         return res
     } catch (error) {
         console.log(error)
+        catchAxiosError(error)
     }
 }
 

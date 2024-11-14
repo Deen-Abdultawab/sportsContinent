@@ -48,7 +48,6 @@ export const logout = async ()=>{
         'Content-Type': 'application/json',
       }
     });
-    console.log(res)
     catchAxiosSuccess(res);
   } catch (error) {
     catchAxiosError(error);
