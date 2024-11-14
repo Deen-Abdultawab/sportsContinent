@@ -11,13 +11,13 @@
                 <div class="w-2/3 animate__animated animate__slideInLeft"
                 :class="{ 'animate__animated animate__slideOutLeft': !closeNav }"
                 >
-                    <mobSidebar />
+                    <mobSidebar @closeNav="toggle"/>
                 </div>
             </div>
             
             <div class="flex-1 flex-grow">
                 <nav class="flex w-full bg-[#FAFAFA] justify-end desk:justify-between py-[1rem] px-[3.75rem] !sticky top-0 min-[370px]:pt-5 items-center z-[999]">
-                    <div class="logo w-[4rem] h-[4rem] cursor-pointer desk:block hidden">
+                    <div class="logo w-[4rem] h-[4rem] cursor-pointer desk:block hidden" @click="routeToDashboard">
                         <img src="@/assets/images/logo.png" alt="">
                     </div>
                     <div class="hidden lg:flex items-end gap-[2.5rem]">
@@ -96,6 +96,10 @@ const router = useRouter();
 
 const routeToCreate = ()=>{
     router.push({name: 'newProduct'})
+}
+
+const routeToDashboard = ()=>{
+  router.push({ name: 'dashboard' })
 }
 
 const handleLogOut = async ()=>{

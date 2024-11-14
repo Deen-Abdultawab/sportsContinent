@@ -2,7 +2,7 @@
   <Navbar />
   <section class="home_view">
     <header class="min-h-[630px] w-full relative background">
-      <video src="../assets/videos/intro.mp4" autoplay muted loop class="h-full w-full object-cover mob:object-cover absolute z-[-1]"></video>
+      <video src="https://res.cloudinary.com/dfnecyrhc/video/upload/v1731546288/Sports%20Continent/ntdsnoue2wlme5rclrdf.mp4" autoplay muted loop class="h-full w-full object-cover mob:object-cover absolute z-[-1]"></video>
       <div class="pt-[10rem] pl-[9.75rem] w-[50.08%] tab2:w-[90%] tab2:pl-[2rem]">
         <div class="animate__animated animate__fadeInLeft animate__slow">
           <h1 class="font-Raleway font-[700] text-[#FFFFFF] text-[3rem] leading-[3.6rem]">Shop easy, Ball hard</h1>
@@ -11,7 +11,7 @@
             <button class="bg-[#007646] py-[0.75rem] px-[1rem] rounded-[12.5rem] font-openSans text-[1rem] font-[400] leading-[1.2rem] text-[#FFFFFF] border-0">Shop Now</button>
           </router-link>
         </div>
-        <a href="https://wa.me/1234567890" target="_blank">
+        <a href="https://wa.me/+2348138726068" target="_blank">
           <img src="../assets/images/whatsapp_logo.png" alt="" class="absolute bottom-[3.75rem] right-[9.75rem] cursor-pointer hover:scale-105 transitionItem tab2:right-[2rem]">
         </a>
       </div>

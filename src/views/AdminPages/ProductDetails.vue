@@ -194,9 +194,6 @@
                                 </div>
                                 <div v-else>
                                     <h3>No thumbnails uploaded</h3>
-                                    <span>pd: {{ productDetails.images }}</span>
-                                    <span>main: {{ mainBG }}</span>
-                                    <span>sp: {{ singleProduct?.images }}</span>
                                 </div>
                             </div>
                             <div class="w-full flex gap-4 mt-[4rem]">

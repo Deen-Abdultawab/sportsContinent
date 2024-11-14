@@ -28,8 +28,8 @@
         >
             <div class="bg-[#007646] w-full py-[1.06rem] px-[3rem] text-white flex justify-between items-center mob:justify-end">
                 <div class="flex items-center gap-[2.5rem] mob:hidden">
-                    <a href="https://wa.me/1234567890" target="_blank">
-                        <p>+234 123 456 7890</p>
+                    <a href="https://wa.me/+2348138726068" target="_blank">
+                        <p>+2348138726068</p>
                     </a>
                     <a href="" target="_blank">
                         <p>Twitter</p>

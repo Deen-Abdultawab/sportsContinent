@@ -40,6 +40,34 @@
                 <h3>Customers</h3>
                 </router-link>
             </li>
+            <li>
+                <div class="link" @click="showCreateCategory">
+                    <CategoryIcon />
+                    <h3>Create Category</h3>
+                </div>
+                <div class="w-full mt-4 transitionItem overflow-hidden"
+                :class="showCreateCats? 'h-auto': 'h-0'"
+                >
+                    <article>
+                        <label for="name" class="font-[500]"> Name</label>
+                        <input 
+                        v-model="categoryName"
+                        type="text" 
+                        id="name"
+                        placeholder="Category Name" class="border border-textCol p-[0.5rem] rounded-[0.3rem] bg-inherit focus:outline-none text-[0.8rem] mt-[0.3rem] w-full">
+                    </article>
+                    <article class="my-[0.5rem]">
+                        <label for="descr" class="font-[500]"> Description </label>
+                        <textarea 
+                        v-model="categoryDescription"
+                        name="descr" id="descr" placeholder="Category Name" class="border border-textCol p-[0.3rem] bg-inherit focus:outline-none text-[0.8rem] w-full mt-[0.3rem] rounded-[0.3rem]"></textarea>
+                    </article>
+                    <button class="w-full bg-textCol text-white p-[0.5rem] rounded-[0.5rem]" @click="handleCreateCategory">
+                        <loader v-if="isLoading"/>
+                        <span v-else>Submit</span>
+                    </button>
+                </div>
+            </li>
         </ul>
 
         <!-- <div class="absolute left-0 bottom-4 item-start gap-4 mob:w-full px-4 flex flex-col ">
@@ -61,9 +89,46 @@ import documentIcon from "@/components/icons/Document.vue"
 import userIcon from "@/components/icons/UserIcon.vue"
 import ArrowDown from "@/components/icons/ArrowDown.vue"
 import { useRoute, useRouter } from "vue-router";
+import { useAdminStore } from "@/stores/admin"
+import { ref } from "vue"
+import loader from "@/components/Loader/WhiteLoader.vue"
+import { useToast } from "vue-toastification";
+import CategoryIcon from "@/components/icons/CategoryIcon.vue"
 
+const adminStore = useAdminStore()
 const router = useRouter();
 const route = useRoute()
+const categoryName = ref('')
+const categoryDescription = ref('')
+const showCreateCats = ref(false)
+const isLoading = ref(false)
+const toast = useToast()
+
+const emit = defineEmits(['closeNav'])
+
+const showCreateCategory = async ()=>{
+    showCreateCats.value = !showCreateCats.value
+}
+
+const handleCreateCategory = async()=>{
+    isLoading.value = true
+    let payload = {
+        "name": categoryName.value,
+        "slug": categoryName.value?.toLowerCase().replace(/\s+/g, "-"),
+        "description": categoryDescription.value
+    }
+    try {
+        await adminStore.handleCreateCategories(payload)
+        emit('closeNav')
+        toast.success("category created successfully", {
+                timeout: 4000,
+            });
+        isLoading.value = false
+    } catch (error) {
+        console.log(error)
+        isLoading.value = false
+    }
+}
 
 </script>
 

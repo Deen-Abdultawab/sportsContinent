@@ -281,7 +281,6 @@
     };
 
     const saveChanges = async ()=> {
-
         if (!productDetails.name || !productDetails.price || !productDetails.categoryId) {
             toast.error("Please complete all required fields.");
             isLoading.value = false;

@@ -129,6 +129,17 @@ export const createCategories = async (payload)=>{
     }
 }
 
+export const deleteCategories = async (slug)=>{
+    try {
+        let res = await axios.delete(`category/${slug}`)
+        catchAxiosSuccess(res)
+        return res.data
+    } catch (error) {
+        console.log(error)
+        catchAxiosError(error)
+    }
+}
+
 export const getCategories = async ()=>{
     try {
         let res = await axios.get('category')

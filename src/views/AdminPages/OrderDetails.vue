@@ -250,15 +250,8 @@
    };
 
    const routeToProfile = (slug)=> {
-      router.push({ name: 'customer-detail', params: { slug }})
+      router.push({ name: 'customerDetail', params: { slug }})
    }
-   // Mock product data
-   const products = ref([
-   { image: 'https://picsum.photos/50?random=1', name: 'Lorem Ipsum', orderId: '#25421', quantity: 2, total: 800.40 },
-   { image: 'https://picsum.photos/50?random=2', name: 'Lorem Ipsum', orderId: '#25421', quantity: 2, total: 800.40 },
-   { image: 'https://picsum.photos/50?random=3', name: 'Lorem Ipsum', orderId: '#25421', quantity: 2, total: 800.40 },
-   { image: 'https://picsum.photos/50?random=4', name: 'Lorem Ipsum', orderId: '#25421', quantity: 2, total: 800.40 }
-   ]);
 
    const statusClass = (status) => {
       switch (status) {

@@ -82,6 +82,7 @@ import { useRoute, useRouter } from "vue-router";
 import { ref } from "vue"
 import { useAdminStore } from "@/stores/admin"
 import loader from "@/components/Loader/WhiteLoader.vue"
+import { useToast } from "vue-toastification";
 
 const adminStore = useAdminStore()
 const router = useRouter();
@@ -90,6 +91,7 @@ const categoryName = ref('')
 const categoryDescription = ref('')
 const showCreateCats = ref(false)
 const isLoading = ref(false)
+const toast = useToast()
 
 const showCreateCategory = async ()=>{
     showCreateCats.value = !showCreateCats.value
@@ -105,6 +107,9 @@ const handleCreateCategory = async()=>{
     console.log(payload)
     try {
         await adminStore.handleCreateCategories(payload)
+        toast.success("category created successfully", {
+                timeout: 4000,
+            });
         isLoading.value = false
     } catch (error) {
         console.log(error)
