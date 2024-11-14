@@ -139,7 +139,6 @@ const setPage = async(page)=>{
 
 onMounted(async()=>{
     await handleGetProducts(currentPage.value)
-    console.log(products.value)
 })
 
 </script>
