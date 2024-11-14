@@ -301,7 +301,6 @@ const handleSignup = async () => {
       "phone": formData.phone_number
     }
     try {
-        console.log(payload)
         const res = await registerCustomer(payload)
         console.log(res)
         if(res.statusText === "Created"){
