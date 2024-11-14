@@ -262,7 +262,8 @@ const handleCheckout = async ()=>{
     try {
         if(formData.address.length > 0 && formData.city.length > 0 && formData.state.length > 0 && formData.country.length > 0 && formData.zip_code.length > 0 && formData.email.length > 0) {
             let res = await adminStore.handleCreateOrders(payload)
-            if(res.statusText === "Created" ){
+            console.log(res)
+            if(res?.statusText === "Created" ){
                 let payload = {
                     "orderId": res.data?.order?.id,
                     "email": formData.email,
@@ -270,8 +271,8 @@ const handleCheckout = async ()=>{
                 }
                 let paymentRes = await adminStore.handleMakePayments(payload)
                 console.log(paymentRes)
-                if(paymentRes.authorization_url){
-                    window.location.href = paymentRes.authorization_url;
+                if(paymentRes?.authorization_url){
+                    window.location.href = paymentRes?.authorization_url;
                 }
             } else {
                 isLoading.value = false
