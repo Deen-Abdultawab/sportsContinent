@@ -239,7 +239,7 @@
 
         reader.onload = () => {
             mainBG.value = reader.result
-            productDetails.images.push(mainBG.value)
+            productDetails.images = [mainBG.value]
         };
 
         reader.readAsDataURL(file);
