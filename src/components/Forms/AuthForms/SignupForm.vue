@@ -305,7 +305,7 @@ const handleSignup = async () => {
         store.saveUser(res?.data?.user)
         loading.value = false
         router.go(-1)
-        if(res?.statusText === "Created"){
+        if(res.statusText == "Created"){
           console.log('signedup')
         }
     } catch (error) {

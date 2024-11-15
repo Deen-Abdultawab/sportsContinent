@@ -14,7 +14,7 @@
                         <div class="grid grid-cols-customGrid3 gap-6 mb-6">
                             <div class="bg-[#F8F8F8] p-6 rounded-lg shadow-md flex flex-col items-center">
                                 <p class="text-gray-500">Purchases</p>
-                                <h3 class="text-2xl font-semibold">${{ singleCustomer?.data?.metrics?.totalPurchases.toLocaleString() }}</h3>
+                                <h3 class="text-2xl font-semibold">₦{{ singleCustomer?.data?.metrics?.totalPurchases.toLocaleString() }}</h3>
                                 <!-- <span class="text-green-500">+2.2%</span> -->
                             </div>
                             <div class="bg-[#F8F8F8] p-6 rounded-lg shadow-md flex flex-col items-center">

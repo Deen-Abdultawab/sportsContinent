@@ -174,7 +174,7 @@
         let res = await addToCart(payload)
         await cartStore.handleGetCart()
         await cartStore.updateCartCount()
-        if(res.statusText === "OK"){
+        if(res.statusText == "OK"){
           toast.success("item added to cart successfully", {
             timeout: 4000,
           });
