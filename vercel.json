@@ -4,6 +4,13 @@
         "source": "/(.*)",
         "destination": "/index.html"
       }
+    ],
+    "redirects": [
+      {
+        "source": "/(.*)",
+        "destination": "https://www.shopsportscontinent.com/",
+        "permanent": true
+      }
     ]
   }
   

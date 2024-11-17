@@ -82,7 +82,6 @@
                                             placeholder="Enter Price in Naira"
                                             v-model="productDetails.discountPrice"
                                             title="Regular/Discounted Price"
-                                            
                                         />
                                         <InputField 
                                             type="number"
@@ -142,9 +141,10 @@
                                 <img :src="mainBG" alt="" class="absolute top-0 w-full h-full left-0" :class="mainBG.length > 0? 'opacity-[0.5] z-[0.5]': 'opacity-0 z-[-1]'">
                             </div>
                             <div>
-                                <h3 class="text-[#232321] font-[600] mb-4">
+                                <h3 class="text-[#232321] font-[600] mb-2">
                                     Product Thumbnails
                                 </h3>
+                                <p class="mb-4">Enter at least three images</p>
                                 <div>
                                     <label for="thumbUpload">
                                         <div class="flex flex-col items-center justify-center py-8 px-4 rounded-[0.5rem] border gap-[1.63rem] border-dashed border-[#232321] cursor-pointer mb-[1.25rem]">
@@ -239,7 +239,7 @@
 
         reader.onload = () => {
             mainBG.value = reader.result
-            productDetails.images = [mainBG.value]
+            productDetails.images.push(mainBG.value)
         };
 
         reader.readAsDataURL(file);
@@ -271,7 +271,8 @@
                 name: file.name,
                 file: reader.result
             })
-            // productDetails.images.push(mainBG.value)
+            let name = reader.result
+            productDetails.images.push(name)
         };
 
         reader.readAsDataURL(file);
@@ -300,6 +301,7 @@
             "categoryId": productDetails.categoryId,
         };
         try {
+            console.log(payload)
              await handleCreateProduct(payload)
             console.log(createResponse.value)
             toast.success("product created successfully", {

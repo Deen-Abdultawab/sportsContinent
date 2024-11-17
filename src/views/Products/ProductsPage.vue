@@ -7,9 +7,9 @@
             <div class="category_btns flex items-center flex-wrap gap-4 mb-12">
                  <!-- "All" category item -->
                 <span
-                @click="setActiveCategory(null)"
+                @click="setActiveCategory('All')"
                 class="py-[0.375rem] px-[0.75rem] rounded-[100px] border border-[#B0E3CE] cursor-pointer hover:bg-[#009759] hover:text-white transitionItem"
-                :class="activeCategory === null ? 'bg-[#009759] text-white' : ''"
+                :class="activeCategory === 'All' ? 'bg-[#009759] text-white' : ''"
                 >
                 All
                 </span>
@@ -18,9 +18,9 @@
                 <span
                 v-for="(category, index) in categories.category"
                 :key="category.name"
-                @click="setActiveCategory(index, category?.name)"
+                @click="setActiveCategory(category?.name)"
                 class="py-[0.375rem] px-[0.75rem] rounded-[100px] border border-[#B0E3CE] cursor-pointer hover:bg-[#009759] hover:text-white transitionItem"
-                :class="activeCategory === index ? 'bg-[#009759] text-white' : ''"
+                :class="activeCategory === category?.name ? 'bg-[#009759] text-white' : ''"
                 >
                 {{ category.name }}
                 </span>
@@ -82,7 +82,7 @@
 import Navbar from '@/components/Navbar.vue';
 import Footer from '@/components/Footer.vue';
 import { ref, computed, onMounted, onUnmounted, nextTick, watch} from "vue";
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import ProductCard from '@/components/ui/ProductCard.vue';
 import PaginationArrowIcon from '@/components/icons/PaginationArrowIcon.vue';
 import { storeToRefs } from "pinia";
@@ -93,6 +93,7 @@ import loader from "@/components/Loader/Loader.vue"
 const adminStore = useAdminStore()
 const { products, categories, currentCurrency, filteredProduct } = storeToRefs(adminStore)
 const router = useRouter()
+const route = useRoute()
 const isLoading = ref(false)
 const currentPage = ref(1)
 const activeCategory = ref(null)
@@ -101,8 +102,8 @@ const sortOption = ref('');
 const itemsPerPage = 10;
 
 
-const setActiveCategory = async (index, slug) => {
-  activeCategory.value = index;
+const setActiveCategory = async (slug) => {
+  activeCategory.value = slug;
   activeSlug.value = slug
 };
 
@@ -144,18 +145,14 @@ const routeToProductDetails = (slug)=>{
     router.push({ name: 'product_detail', params: { slug}})
 }
 
-const getCurrencySymbol = (currencyCode) => {
-    switch (currencyCode) {
-        case 'USD':
-        return '$';
-        case 'GBP':
-        return '£';
-        case 'NGN':
-        return '₦';
-        default:
-        return ''; // Default symbol if currency code is unknown
+const querySearch = ()=>{
+    if(route.query.category && route.query.category.length > 0){
+        activeSlug.value = route.query.category
+        setActiveCategory(activeSlug.value)
+    } else {
+        setActiveCategory('All')
     }
-};
+}
 
 const handleGetProducts = async ()=>{
     isLoading.value = true
@@ -197,6 +194,7 @@ watch(currentCurrency, async (newCurrency) => {
 });
 
 onMounted(async()=>{
+    querySearch()
     await adminStore.getCurrency()
     await adminStore.updateCurrency(currentCurrency.value)
     await handleGetProducts()

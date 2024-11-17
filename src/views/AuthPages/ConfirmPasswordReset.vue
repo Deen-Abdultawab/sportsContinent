@@ -22,14 +22,14 @@
             Set new password for your account
          </p>
          <div class="mt-[3rem] mb-[2rem] flex flex-col gap-6">
-            <AuthInput
+            <!-- <AuthInput
                 :error="errors.email"
                 :errorsMsg="errorsMsg?.email"
                 v-model="formData.email"
                 type="email"
                 placeholder="Email Address*"
                 id="email"
-            />
+            /> -->
             <PasswordInput
                 :error="errors.password"
                 :errorsMsg="errorsMsg?.password || !isValidPassword"

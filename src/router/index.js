@@ -35,12 +35,12 @@ const router = createRouter({
       component: () => import('../views/AuthPages/Signin.vue')
     },
     {
-      path: '/reset-password',
+      path: '/forget-password',
       name: 'reset_password',
       component: () => import('../views/AuthPages/ResetPassword.vue')
     },
     {
-      path: '/reset-password/new-password',
+      path: '/reset-password',
       name: 'new_password',
       component: () => import('../views/AuthPages/ConfirmPasswordReset.vue')
     },
@@ -58,6 +58,11 @@ const router = createRouter({
       path: '/admin/create',
       name: 'newProduct',
       component: () => import('../views/AdminPages/CreateProducts.vue')
+    },
+    {
+      path: '/admin/category',
+      name: 'category',
+      component: () => import('../views/AdminPages/CategoryPage.vue')
     },
     {
       path: '/admin/orders',

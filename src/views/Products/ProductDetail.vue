@@ -10,7 +10,7 @@
           <div class="thumbnails flex gap-6">
             <article 
               class="rounded-[6px] overflow-hidden hover:scale-105 transitionItem w-[10rem] h-[10rem] cursor-pointer"
-              v-for="(item, index) in singleProduct?.images"
+              v-for="(item, index) in singleProduct?.images?.slice(1,4)"
               :key="item"
               @click="setUrl(item)"
             >
@@ -19,7 +19,6 @@
           </div>
         </div>
         <div class="product_info w-[50%] tab2:w-full flex flex-col gap-[2rem] pt-12">
-          <!-- {{ singleProduct }} -->
           <h1 class="product_name font-Raleway font-[700] text-textCol text-[2.5rem] leading-[3rem] mob:text-[2rem] mob:leading-[2rem]">
             {{ singleProduct?.name}}
           </h1>

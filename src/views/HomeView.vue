@@ -20,33 +20,38 @@
     <main class="py-[2.5rem] tab:w-[90%] mx-auto">
       <div class="pl-[9.75rem] tab:pl-0">
         <h3 class="font-Raleway font-[700] text-textCol text-[3rem] leading-[3.6rem] mb-[2.5rem] mob2:text-[2.5rem]">Our Collections</h3>
-        <div class="collection_slide_container flex overflow-x-auto gap-[1.5rem] no-scrollbar">
+        <div class="w-full h-full grid place-items-center" v-if="isLoadingCategory">
+          <loader />
+        </div>
+        <div class="collection_slide_container flex overflow-x-auto gap-[1.5rem] no-scrollbar" v-else>
           <article 
-          class="shrink-0 flex flex-col gap-[1.25rem] cursor-pointer mob:basis-[70%]"
-          v-for="item in collections"
+          class="flex flex-col gap-[1.25rem] cursor-pointer mob:basis-[70%] pr-8"
+          v-for="item in categories?.category"
           :key="item.id"
+          @click="routeToProductSearch(item?.name)"
           >
-            <div class="rounded-[0.75rem] overflow-hidden">
-              <img :src="getImgUrl(item.src)" :alt="item.title">
+            <div class="rounded-[0.75rem] overflow-hidden min-w-[20rem] min-h-[20rem] border border-textCol">
+              <img :src="item?.image" :alt="item?.name">
             </div>
             <div class="flex items-center justify-between">
-              <h3 class="font-Raleway font-[700] text-[2rem] leading-[2.4rem] capitalize">{{ item.title }}</h3>
+              <h3 class="font-Raleway font-[700] text-[2rem] leading-[2.4rem] capitalize">{{ item?.name }}</h3>
               <RightArrowIcon />
             </div>
           </article>
         </div>
       </div>
-      <div class="featured_products mt-[12.31rem] tab:mt-[6rem] w-[78%] mx-auto tab:w-full">
+      <div class="featured_products mt-[10rem] tab:mt-[6rem] w-[78%] mx-auto tab:w-full">
         <h3 class="font-Raleway font-[700] text-textCol text-[3rem] leading-[3.6rem] mb-[2rem] mob2:text-[2.5rem]">Featured Products</h3>
         <div class="w-full h-full grid place-items-center" v-if="isLoading">
           <loader />
         </div>
-        <div class="featured_products_container grid grid-cols-customGrid2 gap-[1.5rem] tab:grid-cols-customGrid3" v-else>
+        <div class="featured_products_container flex gap-[1.5rem] flex-wrap justify-center" v-else>
           <ProductCard 
           v-for="(item, index) in featuredProducts.slice(0,3)"
           :key="item.id"
           :product="item"
           @click="routeToProductDetails(item?.id)"
+          class="max-w-[20rem]"
           />
         </div>
       </div>
@@ -71,9 +76,10 @@ import { ref, watch } from "vue"
 import loader from "@/components/Loader/Loader.vue"
 
 const adminStore = useAdminStore()
-const { featuredProducts, currentCurrency } = storeToRefs(adminStore)
+const { featuredProducts, currentCurrency, categories } = storeToRefs(adminStore)
 const router = useRouter()
 const isLoading = ref(false)
+const isLoadingCategory = ref(false)
 
 const handleGetFeaturedProducts = async ()=>{
   isLoading.value = true
@@ -87,6 +93,17 @@ const handleGetFeaturedProducts = async ()=>{
   }
 }
 
+const handleGetCategories = async ()=>{
+  isLoadingCategory.value = true
+  try {
+    await adminStore.handleGetCategories()
+    isLoadingCategory.value = false
+  } catch (error) {
+    console.log(error)
+    isLoadingCategory.value = false
+  } 
+}
+
 watch(currentCurrency, async (newCurrency) => {
   await adminStore.updateCurrency(newCurrency);
   await handleGetFeaturedProducts();
@@ -97,59 +114,22 @@ const routeToProductDetails = (slug)=>{
     router.push({ name: 'product_detail', params: { slug}})
 }
 
+const routeToProductSearch = (slug)=>{
+  console.log(slug)
+  router.push({
+    name: "allProducts",
+    query: {
+      category: slug
+    }
+  })
+}
+
 onMounted(async () => {
   await adminStore.getCurrency()
   await adminStore.updateCurrency(currentCurrency.value)
+  await handleGetCategories()
   await handleGetFeaturedProducts()
 })
-
-const collections = [
-  {
-    id: 1,
-    src: 'col1.png',
-    title: 'Football Jerseys'
-  },
-  {
-    id: 2,
-    src: 'col2.png',
-    title: 'Basketball Combo'
-  },
-  {
-    id: 3,
-    src: 'col3.png',
-    title: 'Slides'
-  },
-  {
-    id: 5,
-    src: 'col5.png',
-    title: 'Roundnecks'
-  },
-  {
-    id: 6,
-    src: 'col6.png',
-    title: 'Tracksuits'
-  },
-  {
-    id: 7,
-    src: 'col7.png',
-    title: 'Tracksuits'
-  },
-  {
-    id: 9,
-    src: 'col9.png',
-    title: 'Shorts'
-  },
-  {
-    id: 10,
-    src: 'col10.png',
-    title: 'Baseball Jerseys'
-  },
-  {
-    id: 11,
-    src: 'col11.png',
-    title: 'joggers'
-  },
-]
 
 
 const getImgUrl = (path) => {

@@ -19,7 +19,7 @@
                     @keyup.enter="handleLogin"
                 />
             </div>
-            <router-link to="/reset-password">
+            <router-link to="/forget-password">
               <p class="text-center font-[600] font-openSans text-[1rem] leading-[1.2rem] text-[#3B3B3B] my-[2rem] cursor-pointer">Forgot Password?</p>
             </router-link>
 
