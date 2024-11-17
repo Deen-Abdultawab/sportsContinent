@@ -106,22 +106,13 @@ const validateForm = () => {
 };
 
 const handleRequestToken = async ()=>{
-  // router.push({ name: 'new_password'})
     loading.value = true
     if (!validateForm()) {
         loading.value = false;
         return;
     }
     try {
-        // const res = await medusa.customers.generatePasswordToken({
-        //     email: formState.email
-        // })
-
-        // if(res.response.statustext === "OK"){
-        //     toast.success("A reset mail has been sent to you, endeavour to wait a few minute and check spam mails", {
-        //     timeout: 4000,
-        //   });
-        // }
+        
         loading.value = false
     } catch (error) {
         console.log(error)

@@ -156,14 +156,14 @@
                                     <p>Tax (0%):</p>
                                     <p> ₦0</p>
                                  </div>
-                                 <div class="flex justify-between">
+                                 <!-- <div class="flex justify-between">
                                     <p>Discount:</p>
                                     <p> ₦0</p>
                                  </div>
                                  <div class="flex justify-between">
                                     <p>Shipping Rate:</p>
                                     <p> ₦0</p>
-                                 </div>
+                                 </div> -->
                                  <div class="flex justify-between">
                                     <p class="text-xl font-bold">Total:</p>
                                     <p class="text-xl font-bold"> {{ getCurrencySymbol(singleOrder?.data?.order?.currency) }} {{ singleOrder?.data?.order?.total?.toLocaleString() }}</p>

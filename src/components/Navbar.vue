@@ -100,7 +100,7 @@
                     <h3 class="text-right text-[4rem] font-Raleway leading-[4.8rem] font-[700] mb-4 px-[1.69rem] pt-[3rem]">Your Bag</h3>
                     <div class="flex-1 px-[1.69rem] mt-[.625rem] overflow-y-auto">
                         <p 
-                        v-if="!cartItems?.cart?.items?.length > 0"
+                        v-if="!cartLength > 0"
                         class="text-right font-openSans font-[500] text-[1.5rem] leading-[1.675rem]">Your bag is empty at the moment</p>
                         <div v-else class="flex flex-col gap-8 py-4">
                             <div 
@@ -135,7 +135,7 @@
                         </div>
                         <button
                         class="primary_btn w-full rounded-[2000px] font-[500] font-openSans text-white text-[1.2rem] leading-[1.8rem] uppercase py-[1rem]"
-                        :class="!cartItems?.cart?.items?.length > 0 ? '!cursor-not-allowed !bg-gray-400': 'bg-primaryBG'"
+                        :class="!cartLength > 0 ? '!cursor-not-allowed !bg-gray-400': 'bg-primaryBG'"
                         @click="routeToCheckout"
                         >checkout</button>
                     </div>
@@ -177,6 +177,7 @@ const showBag = ref(false);
 const router = useRouter()
 const route = useRoute()
 const isRemoving = ref(false)
+const cartLength = ref(0)
 
 const handleCurrencyChange =async () => {
   await adminStore.updateCurrency(currentCurrency.value)
@@ -185,7 +186,7 @@ const handleCurrencyChange =async () => {
 
 const handleLogout = async () =>{
     try {
-        await logout();
+        // await logout();
         handleCloseNavDrop()
         user.value = null
         if(localStorage.getItem('_cart_id')){
@@ -196,7 +197,7 @@ const handleLogout = async () =>{
             localStorage.removeItem('_user_data')
         }
         cartCount.value = 0
-        cartItems.value.cart.items = []
+        cartLength.value = 0
         if(route.name === "home"){
             router.push({ name: "signin" });
         } else {
@@ -287,6 +288,7 @@ onMounted( async () => {
     if(user.value){
         await cartStore.handleGetCart()
         cartStore.updateCartCount()
+        cartLength.value = cartItems.value?.cart?.items?.length
     }
 
     const storedCurrency = localStorage.getItem('currency');

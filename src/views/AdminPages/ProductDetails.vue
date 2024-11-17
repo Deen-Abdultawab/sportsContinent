@@ -29,14 +29,7 @@
                             </div>
                             <div class="w-full">
                                 <label for="isFeatured">Select Category</label>
-                                <!-- <InputField 
-                                    type="text"
-                                    placeholder="Product Category"
-                                    v-model="productDetails.categoryId"
-                                    title="Category"
-                                /> -->
                                 <div class="mt-4 border border-[#232321] rounded-[0.5rem] w-full px-4 py-[0.95rem] transitionItem" >
-                                    <!-- {{ categories }} -->
                                     <select 
                                         class="w-full border-none focus:outline-none bg-inherit"
                                         v-model="productDetails.categoryId" 
@@ -122,7 +115,7 @@
                         </div>
                         <div>
                             <div class="rounded-[0.5rem] bg-[#00000033] h-[500px] w-full mb-[2rem] relative">
-                                <label for="fileUpload" class="absolute top-0 left-0 w-full h-full z-[1]">
+                                <label for="fileUpload" class="absolute top-0 left-0 w-full h-full z-[1] hidden">
                                         <div class="flex flex-col items-center justify-center py-8 px-4 rounded-[0.5rem] border gap-[1.63rem] border-dashed border-[#232321] mb-[1.25rem] h-full z-[1]"
                                         :class="!isEditable? 'cursor-not-allowed': 'cursor-pointer'"
                                         >
@@ -153,7 +146,7 @@
                                 <h3 class="text-[#232321] font-[600] mb-4">
                                     Product Thumbnails
                                 </h3>
-                                <div>
+                                <div class="hidden">
                                     <label for="thumbUpload">
                                         <div class="flex flex-col items-center justify-center py-8 px-4 rounded-[0.5rem] border gap-[1.63rem] border-dashed border-[#232321] mb-[1.25rem]"
                                         :class="!isEditable? 'cursor-not-allowed': 'cursor-pointer'"
@@ -175,17 +168,17 @@
                                     >
                                 </div>
 
-                                <div class="flex flex-col gap-[1.25rem]" v-if="thumbnails.length > 0">
+                                <div class="flex flex-col gap-[1.25rem]" v-if="singleProduct?.images?.length > 1">
                                     <article 
-                                    v-for="item in thumbnails"
-                                    :key="item.name"
+                                    v-for="(item, index) in singleProduct?.images?.slice(1, 4)"
+                                    :key="index"
                                     class="flex items-center justify-between bg-[#FAFAFA] rounded-[0.5rem] py-4 px-[1.25rem]">
                                         <div class="flex items-center gap-4">
                                             <div class="w-[4rem] h-[4rem] rounded-[0.5rem] border !border-textCol shadow-md overflow-hidden">
-                                                <img :src="item.file" alt="" class="w-full h-full object-cover">
+                                                <img :src="item" alt="" class="w-full h-full object-cover">
                                             </div>
                                             <div>
-                                                <h3 class="mb-4">{{ item.name }}</h3>
+                                                <h3 class="mb-4">Thumbnail {{ index + 1 }}</h3>
                                                 <rangeBar />
                                             </div>
                                         </div>
@@ -302,12 +295,12 @@
             "name": productDetails.name,
             "price": parseFloat(productDetails.price),
             "currency": productDetails.currency || "NGN",
+            "discountPrice": parseFloat(productDetails.discountPrice),
             "sizes": productDetails.sizes,
             "description": productDetails.description,
             "isFeatured": productDetails.isFeatured,
             "categoryId": productDetails.categoryId,
-            "stock": parseInt(productDetails.stock),
-            "images": areArraysEqual(productDetails.images, singleProduct?.value.images) ? [] : productDetails.images,
+            "stock": parseInt(productDetails.stock)
          }
         try {
             console.log(payload, route.params.slug)

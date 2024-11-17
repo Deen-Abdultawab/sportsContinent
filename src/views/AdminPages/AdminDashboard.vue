@@ -13,7 +13,7 @@
                 <orderSummary title="total orders" :quantity="analytics?.data?.totalOrders" />
                 <orderSummary title="total products" :quantity="analytics?.data?.totalProducts" />
                 <orderSummary title="total users" :quantity="analytics?.data?.totalUsers" />
-                <orderSummary title="total revenue" :quantity="analytics?.data?.totalRevenue" showCurrency="true" />
+                <orderSummary title="total revenue" :quantity="analytics?.data?.totalRevenue.toLocaleString()" showCurrency="true" />
             </div>
             <div class="bg-[#F8F8F8] py-[1.5rem] px-4 rounded-[1rem] shadow-md mb-[1.5rem]">
                 <h3 class="text-textCol font-[700] mb-[0.72rem] capitalize">Best Seller</h3>

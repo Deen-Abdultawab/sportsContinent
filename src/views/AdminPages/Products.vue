@@ -22,10 +22,9 @@
                                 v-for="(product, index) in products?.products" 
                                 :key="product?.id" 
                             class="bg-[#F8F8F8] rounded-lg shadow-md p-4 cursor-pointer hover:shadow-xl transitionItem flex flex-col" :id="product?.id"
+                            :class="products?.products?.length < 2? 'max-w-[22rem]': ''"
                             @click="routeToDetails(product?.id)"
                             >
-                            <!-- {{ product }} -->
-                                <!-- Product Image -->
                                  <div class="flex-1 min-h-[250px]">
                                      <img 
                                      :src="product?.images[0]" 
@@ -38,7 +37,7 @@
                                 <div class="mb-2">
                                 <h3 class="text-lg font-semibold">{{ product?.name }}</h3>
                                 <p class="text-sm text-gray-500">{{ product?.category?.name }}</p>
-                                <p class="font-bold text-lg mt-2">{{ getCurrencySymbol(product?.originalCurrency) }}{{ product?.originalPrice.toLocaleString() }}</p>
+                                <p class="font-bold text-lg mt-2">{{ getCurrencySymbol(product?.currency) }}{{ product?.price.toLocaleString() }}</p>
                                 </div>
                                 
                                 <!-- Product Summary -->

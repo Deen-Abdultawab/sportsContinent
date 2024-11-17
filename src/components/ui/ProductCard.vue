@@ -7,7 +7,7 @@
       <div class="rounded-[0.75rem] overflow-hidden h-full w-full max-h-[15rem]">
           <img :src="props?.product?.images[0]" alt="" class="object-contain h-full w-full">
       </div>
-      <div class="mob:text-center">
+      <div class="text-center">
           <h3 class="font-Raleway font-[700] text-[0.875rem] leading-[1.05rem] text-textCol">{{ props?.product?.name}}</h3>
           <div class="items-end font-openSans font-[400] text-textCol mt-[0.2rem]">
               <span class="old_price text-[0.75rem] line-through mr-[0.5rem] leading-[0.9rem]" v-if="props.product?.discountPrice">{{ getCurrencySymbol(props.product?.currency) }}{{ props.product?.discountPrice }}</span>

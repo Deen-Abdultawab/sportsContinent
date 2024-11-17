@@ -15,6 +15,7 @@ import {
     deleteProduct,
     getCategories,
     createCategories,
+    deleteCategories,
     updateProducts,
     getProductsByCategories
  } from '@/services/Admin'
@@ -116,6 +117,15 @@ export const useAdminStore = defineStore('admin', ()=>{
     const handleCreateCategories = async (payload)=>{
         try {
             let res = await createCategories(payload)
+            return res
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const handleDeleteCategories = async (id)=>{
+        try {
+            let res = await deleteCategories(id)
             return res
         } catch (error) {
             console.log(error)
@@ -264,6 +274,7 @@ export const useAdminStore = defineStore('admin', ()=>{
         currentCurrency,
         getCurrency,
         filteredProduct,
-        handleProductByCategory
+        handleProductByCategory,
+        handleDeleteCategories
     }
 })
