@@ -1,13 +1,8 @@
 {
   "redirects": [
     {
-      "source": "http://shopsportscontinent.com/(.*)",
-      "destination": "https://www.shopsportscontinent.com/",
-      "permanent": true
-    },
-    {
-      "source": "https://shopsportscontinent.com/(.*)",
-      "destination": "https://www.shopsportscontinent.com/",
+      "source": "http://:path*",
+      "destination": "https://:path*",
       "permanent": true
     }
   ],
