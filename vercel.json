@@ -7,11 +7,10 @@
   ],
   "redirects": [
     {
-      "source": "/(.*)",
+      "source": "/:path*",
       "destination": "https://www.shopsportscontinent.com/:path*",
       "permanent": true,
       "statusCode": 308
     }
   ]
 }
-  
