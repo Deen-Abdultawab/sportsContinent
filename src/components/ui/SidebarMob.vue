@@ -40,6 +40,15 @@
                 <h3>Customers</h3>
                 </router-link>
             </li>
+            <li>
+                <router-link :to="{name: 'category'}"
+                class="link"
+                :class="route.name === 'category'? 'active': ''"
+                >
+                <CategoryIcon />
+                <h3>Category</h3>
+                </router-link>
+            </li>
         </ul>
     </section>
 </template>
@@ -49,7 +58,8 @@ import homeIcon from "@/components/icons/Home.vue"
 import albumIcon from "@/components/icons/Album.vue"
 import documentIcon from "@/components/icons/Document.vue"
 import userIcon from "@/components/icons/UserIcon.vue"
-import { useRoute, useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router"
+import CategoryIcon from "@/components/icons/CategoryIcon.vue"
 
 const router = useRouter();
 const route = useRoute()

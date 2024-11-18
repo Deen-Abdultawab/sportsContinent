@@ -30,7 +30,7 @@
           :key="item.id"
           @click="routeToProductSearch(item?.name)"
           >
-            <div class="rounded-[0.75rem] overflow-hidden min-w-[20rem] min-h-[20rem] border border-textCol">
+            <div class="rounded-[0.75rem] overflow-hidden min-w-[20rem] w-[20rem] min-h-[20rem] max-h-[20rem] border border-textCol">
               <img :src="item?.image" :alt="item?.name">
             </div>
             <div class="flex items-center justify-between">
@@ -45,13 +45,14 @@
         <div class="w-full h-full grid place-items-center" v-if="isLoading">
           <loader />
         </div>
-        <div class="featured_products_container flex gap-[1.5rem] flex-wrap justify-center" v-else>
+        <div class="featured_products_container grid grid-cols-customGrid6 gap-[1.5rem] justify-center mob:grid-cols-2" v-else>
           <ProductCard 
-          v-for="(item, index) in featuredProducts.slice(0,3)"
+          v-for="(item, index) in featuredProducts.slice(0,4)"
           :key="item.id"
           :product="item"
           @click="routeToProductDetails(item?.id)"
-          class="max-w-[20rem]"
+          class=" mob:!max-w-[full] w-full border border-textCol rounded-[0.5rem] shadow-lg"
+          :class="featuredProducts?.length < 2? 'max-w-[20rem]': ''"
           />
         </div>
       </div>

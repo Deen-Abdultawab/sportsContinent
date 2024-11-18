@@ -33,10 +33,26 @@
                 <article>
                     <h3>Connects</h3>
                     <ul>
-                        <li>Instagram</li>
-                        <li>Twitter</li>
-                        <li>Whatsapp</li>
-                        <li>Snapchat</li>
+                        <li>
+                            <a href="https://snapchat.com/t/140i7EO6" target="_blank">
+                                Snapchat
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://x.com/sportscontinen2?s=21" target="_blank">
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://wa.me/+2348138726068" target="_blank">
+                                Whatsapp
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.instagram.com/sportscontinent?igsh=d3JsYnVva3E2czc=" target="_blank">
+                                Instagram
+                            </a>
+                        </li>
                     </ul>
                 </article>
                 <article>

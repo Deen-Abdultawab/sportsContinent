@@ -1,7 +1,7 @@
 <template>
     <Navbar />
     <section>
-        <div class="w-[78.33%] mx-auto mt-[5rem] ">
+        <div class="w-[78.33%] tab:w-[90%] mx-auto mt-[5rem] ">
             <!-- {{ filteredProducts }} -->
             <h3 class="font-Raleway font-[700] text-[3rem] leading-[3.6rem] text-textCol mb-[1.5rem]">All Products</h3>
             <div class="category_btns flex items-center flex-wrap gap-4 mb-12">
@@ -50,14 +50,16 @@
                     <h3 class="text-[1.5rem] font-[600] font-Raleway">No result for this search parameter</h3>
                 </div>
                 <div v-else>
-                    <div class="featured_products_container grid grid-cols-customGrid2 gap-[1.5rem] mb-[2.5rem] tab:grid-cols-customGrid3">
+                    <div class="featured_products_container grid grid-cols-customGrid6 gap-[1.5rem] mb-[2.5rem] tab:grid-cols-customGrid3"
+                    :class="paginatedProducts?.length < 2? 'max-w-[22rem]': ''"
+                    >
                         <ProductCard 
                             v-for="(item, index) in paginatedProducts"
                             :key="index"
                             :product="item"
                             @click="routeToProductDetails(item?.id)"
+                            class=" mob:!max-w-[full] w-full border border-textCol rounded-[0.5rem] shadow-lg"
                         />
-        
                     </div>
                     <div class="pagination flex items-center justify-center gap-[1.5rem] mb-[5.3rem]">
                         <div class="flex gap-[1.5rem] items-center">
@@ -118,7 +120,7 @@ const filteredProducts = computed(()=>{
                 const itemCategory = item?.category?.name?.toLowerCase().trim();
                 const activeCat = activeSlug.value?.toLowerCase().trim()
     
-                if(itemCategory.includes(activeCat)){
+                if(itemCategory === activeCat){
                     return item
                 }
             })

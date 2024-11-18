@@ -17,7 +17,8 @@ import {
     createCategories,
     deleteCategories,
     updateProducts,
-    getProductsByCategories
+    getProductsByCategories,
+    getAddresses
  } from '@/services/Admin'
 
 export const useAdminStore = defineStore('admin', ()=>{
@@ -34,6 +35,7 @@ export const useAdminStore = defineStore('admin', ()=>{
     const createResponse = ref('')
     const currentCurrency = ref('')
     const filteredProduct = ref({})
+    const addresses = ref({})
     const productDetails = ref(
         {
             "name": "",
@@ -240,6 +242,15 @@ export const useAdminStore = defineStore('admin', ()=>{
         }
      };
 
+     const handleGetAddresses = async ()=>{
+        try {
+            addresses.value = await getAddresses()
+            return addresses.value
+        } catch (error) {
+            console.log(error)
+        }
+     }
+
     return { 
         orders,
         products,
@@ -275,6 +286,8 @@ export const useAdminStore = defineStore('admin', ()=>{
         getCurrency,
         filteredProduct,
         handleProductByCategory,
-        handleDeleteCategories
+        handleDeleteCategories,
+        handleGetAddresses,
+        addresses
     }
 })

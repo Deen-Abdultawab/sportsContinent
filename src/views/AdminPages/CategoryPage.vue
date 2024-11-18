@@ -4,7 +4,7 @@
             <div v-if="isLoading" class="w-full h-full grid place-items-center">
                 <loader />   
             </div>
-            <section class="p-4 mx-auto dashboard-orders min-h-[100vh]" v-else>
+            <section class="p-4 mx-auto dashboard-orders min-h-[100vh] pb-[5rem]" v-else>
                 <div>
                     <div class="">
                         <h3 class="text-[#000000] font-[700] text-[1.5rem]">Collections</h3>
@@ -102,6 +102,7 @@
                                         class="!hidden"
                                         @change="uploadCategoryImage"
                                     >
+                                    <p>NB: Images should not exceed <span>20mb</span> in size</p>
                                 </article>
                                 <button 
                                     class="w-full bg-textCol text-white p-[0.5rem] rounded-[0.5rem] mt-[1rem]" 
@@ -194,6 +195,9 @@
             await handleGetCategories();
         } catch (error) {
             console.log(error);
+            toast.error("Image too large", {
+                timeout: 4000,
+            });
         } finally {
             isCreating.value = false;
         }

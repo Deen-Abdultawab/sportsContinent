@@ -123,7 +123,7 @@
                 <span class="flex-1 border border-[#646464]"></span>
             </div>
             <div class="mt-[1.5rem] flex flex-col gap-6">
-              <a :href="`${medusa_url}${authPath}`">
+              <a href="">
                 <div class="flex items-center justify-center altSignup">
                     <GoogleIcon />
                     <h3>Create account with Google</h3>
@@ -155,17 +155,12 @@ import { storeToRefs } from "pinia";
 import { useRouter } from 'vue-router';
 import { useToast } from "vue-toastification";
 import { userStore } from '@/stores/user';
-import { useUserProfile } from '@/stores/profile';
 
-
-const userProfile = useUserProfile();
-const { customerDetails } = storeToRefs(userProfile)
 const store = userStore()
 const toast = useToast();
 const loading = ref(false)
 const confirmPassword = ref("");
 const router = useRouter()
-const authPath = 'store/auth/google'
 
 
 const formData = reactive({
