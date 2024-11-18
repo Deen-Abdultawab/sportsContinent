@@ -30,7 +30,7 @@
           :key="item.id"
           @click="routeToProductSearch(item?.name)"
           >
-            <div class="rounded-[0.75rem] overflow-hidden min-w-[20rem] min-h-[20rem] border border-textCol">
+            <div class="rounded-[0.75rem] overflow-hidden min-w-[20rem] min-h-[20rem] max-h-[20rem] border border-textCol">
               <img :src="item?.image" :alt="item?.name">
             </div>
             <div class="flex items-center justify-between">
@@ -47,7 +47,7 @@
         </div>
         <div class="featured_products_container flex gap-[1.5rem] flex-wrap justify-center" v-else>
           <ProductCard 
-          v-for="(item, index) in featuredProducts.slice(0,3)"
+          v-for="(item, index) in featuredProducts?.slice(0,3)"
           :key="item.id"
           :product="item"
           @click="routeToProductDetails(item?.id)"
