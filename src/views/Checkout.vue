@@ -19,14 +19,13 @@
             <div class="order_details">
                 <h3 class="font-Raleway font-[700] text-[2rem] leading-[2.4rem] text-textCol">Your Order</h3>
                 <div class="my-[2.5rem] flex flex-col gap-4">
-                    <!-- {{ cartItems }} -->
                     <article 
                     class="flex gap-[4.3rem] mob:gap-5"
-                     v-for="(item, index) in cartItems?.items"
+                     v-for="(item, index) in cartItems?.cart?.items"
                      :key="item.id"
                     >
                         <div class="w-[6.24rem] h-[6.25rem] overflow-hidden">
-                            <img :src="item?.product?.images" alt="product image" class="object-fill">
+                            <img :src="item?.product?.images[0]" alt="product image" class="object-fill">
                         </div>
                         <div class="flex flex-1 justify-between">
                             <div>
@@ -157,52 +156,43 @@ import Footer from '@/components/Footer.vue';
 import { useRouter } from 'vue-router';
 import { userStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
-import { computed, onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useCartStore } from '@/stores/cart';
 import { useCurrencyStore } from '@/stores/currency';
 import Loader from "@/components/Loader/WhiteLoader.vue"
 import loader from "@/components/Loader/Loader.vue"
 import { useToast } from "vue-toastification";
-import axios from "axios";
-import CenteredModalLarge from "@/components/ui/CenteredModalLarge.vue"
-import cancelIcon from '@/components/icons/cancelIcon.vue';
 import { useAdminStore } from "@/stores/admin"
-import { useUserProfile } from "@/stores/profile"
 
-const profileStore = useUserProfile()
-const { customer } = storeToRefs(profileStore)
+
 const adminStore = useAdminStore()
-const { createdOrder } = storeToRefs(adminStore)
+const { addresses } = storeToRefs(adminStore)
 const toast = useToast();
 const store = userStore()
 const currencyStore = useCurrencyStore()
 const { currencyState } = currencyStore.useCurrency();
 const cartStore = useCartStore()
 const { cartItems } = storeToRefs(cartStore)
-const { user, countries, states } = storeToRefs(store)
+const { user } = storeToRefs(store)
 const router = useRouter()
 const loading = ref(false)
-const invoiceSent = ref(false)
 const billingAddress = ref([])
 const cartId = ref('')
 const isLoading = ref(false)
-const totalCost = ref(0)
-const personalInfo = ref({})
-const addresses = ref([])
 const isPageLoading = ref(false)
-
-const billingDetails = computed(()=>user.value?.billing_address)
+const sortedAddresses = ref([])
+const addressId = ref('')
 
 const formData = reactive({
-    firstName: billingDetails.value?.first_name || "",
-    lastName: billingDetails.value?.last_name || "",
-    email: billingDetails.value?.metadata?.email || "",
-    country: billingDetails.value?.metadata?.country || "",
-    address: billingDetails.value?.address_1 || "",
-    city: billingDetails.value?.city || "",
-    state: billingDetails.value?.province || "",
-    zip_code: billingDetails.value?.postal_code || "",
-})
+    firstName: "",
+    lastName: "",
+    email: "",
+    country: "",
+    address: "",
+    city: "",
+    state: "",
+    zip_code: "",
+});
 
 const updateShippingInfo = async ()=>{
     loading.value = true
@@ -212,68 +202,71 @@ const updateShippingInfo = async ()=>{
         console.log(error)
         loading.value = false
     }
-    
 }
 
-const handleGetStates = async ()=>{
-    try {
-       await store.getStates(formData.country)
-    } catch (error) {
-        console.log(error)
+function findMatchingAddress(addressArray, comparisonObject) {
+    // Rearrange the array by `createdAt` date in descending order
+    const sortedAddresses = [...addressArray].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    // Compare each item in the sorted array
+    for (const address of sortedAddresses) {
+        // Create a shallow copy of the address excluding userId, createdAt, and updatedAt
+        const { userId, createdAt, updatedAt, ...addressSubset } = address;
+
+        // Check if the comparisonObject matches the current addressSubset
+        const isMatch = Object.keys(addressSubset).every(
+            key => addressSubset[key] === comparisonObject[key]
+        );
+
+        if (isMatch) {
+            // Return the matching address and its ID
+            return { address, id: address.id };
+        }
     }
-}
 
-// generate unique order ID
-
-// Variable to store the latest generated order ID
-const latestOrderId = ref(null);
-
-// Set to store previously generated order IDs
-const generatedOrderIds = new Set();
-
-function generateOrderId() {
-    let orderId;
-
-    do {
-        const randomNumber = Math.floor(1000 + Math.random() * 9000);
-        orderId = `#${randomNumber}`;
-    } while (generatedOrderIds.has(orderId)); 
-
-    generatedOrderIds.add(orderId);
-    latestOrderId.value = orderId;
-
-    return orderId;
+    // If no match is found, return null
+    return null;
 }
 
 const handleCheckout = async ()=>{
      // create order
-    let payload = {
-        "cartId": cartId.value,
-        "shippingAddress": {
-            "street": formData.address,
-            "city": formData.city,
-            "state": formData.state,
-            "country": formData.country,
-            "postalCode": formData.zip_code
+    const payload = ref({})
+    let res = findMatchingAddress()
+    if(!sortedAddresses.value?.length > 0){
+        payload.value = {
+            "cartId": cartId.value,
+            "addressId": addressId.value,
+        }
+    } else {
+        payload.value = {
+            "cartId": cartId.value,
+            "shippingAddress": {
+                "street": formData.address,
+                "city": formData.city,
+                "state": formData.state,
+                "country": formData.country,
+                "postalCode": formData.zip_code
+            }
         }
     }
-    console.log(payload)
+    console.log(payload.value)
     isLoading.value = true
     try {
         if(formData.address.length > 0 && formData.city.length > 0 && formData.state.length > 0 && formData.country.length > 0 && formData.zip_code.length > 0 && formData.email.length > 0) {
-            let res = await adminStore.handleCreateOrders(payload)
-            console.log(res)
-            if(res.status === 201 ){
-                let payload = {
-                    "orderId": res.data?.order?.id,
-                    "email": formData.email,
-                    "amount": res.data?.order?.total
-                }
-                let paymentRes = await adminStore.handleMakePayments(payload)
-                console.log(paymentRes)
-                if(paymentRes?.authorization_url){
-                    window.location.href = paymentRes?.authorization_url;
-                }
+            // let res = await adminStore.handleCreateOrders(payload.value)
+            // console.log(res)
+            if(res?.status == 201 ){
+                // let payload = {
+                //     "orderId": res.data?.order?.id,
+                //     "email": formData.email,
+                //     "amount": res.data?.order?.total
+                // };
+                console.log(payload)
+                // let paymentRes = await adminStore.handleMakePayments(payload)
+                // console.log(paymentRes)
+                // if(paymentRes?.authorization_url){
+                //     window.location.href = paymentRes?.authorization_url;
+                // }
             } else {
                 isLoading.value = false
                 return
@@ -295,33 +288,64 @@ const routeToSignin = ()=>{
     router.push({ name: 'signin'})
 }
 
-const routeToHome = ()=>{
-    router.push({ name: 'home'})
-}
-
-const routeToProducts = ()=>{
-    router.push({ name: 'products'})
-}
-
-const handleAddress = async ()=>{
-    isPageLoading.value = true
-    try {
-        await profileStore.customerProfile()
-        personalInfo.value = customer.value?.data?.personalInfo
-        addresses.value = customer.value?.data?.addresses[0]
-        isPageLoading.value = false
-    } catch (error) {
-        console.log(error)
-        isPageLoading.value = false
+const autoFillAddress = ()=>{
+    if (billingAddress.value) {
+        formData.email = billingAddress.value?.email || "";
+        formData.country = billingAddress.value?.country || "";
+        formData.address = billingAddress.value?.street || "";
+        formData.city = billingAddress.value?.city || "";
+        formData.state = billingAddress.value?.state || "";
+        formData.zip_code = billingAddress.value?.postalCode || "";
+        addressId.value = billingAddress.value?.id
     }
 }
 
 onMounted(async()=>{
     await store.getUser()
     await cartStore.handleGetCart()
-    await handleAddress()
-    console.log(personalInfo.value, addresses.value)
+    await adminStore.handleGetAddresses()
+    cartId.value = cartItems.value?.cart?.id
+    if(addresses.value?.addresses?.length > 0){
+        sortedAddresses.value = [...addresses.value?.addresses].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    }
+    billingAddress.value = sortedAddresses.value[0]
+    autoFillAddress()
+    console.log(sortedAddresses.value)
 })
+
+const address = [
+    {
+        city: "Iyana Ipaja",
+        country: "Nigeria",
+        createdAt: "2024-11-17T16:10:37.922Z",
+        id: "673a157e47e7d07e45af02c7",
+        postalCode: "100006",
+        state: "Lagos",
+        street: "Olorunisola Road",
+        updatedAt: "2024-11-17T16:10:37.922Z",
+        userId: "6739e59803bf6166d8812393"
+    },
+    {
+        city: "Ayobo",
+        country: "Nigeria",
+        createdAt: "2024-11-17T16:20:08.024Z",
+        id: "673a17b847e7d07e45af02ce",
+        postalCode: "100006",
+        state: "Lagos",
+        street: "Number 13, Adesola street",
+        updatedAt: "2024-11-17T16:20:08.024Z",
+        userId: "6739e59803bf6166d8812393"
+    },
+    {
+        city: "Ayobo Lagos",
+        country: "Nigeria",
+        postalCode: "100275",
+        state: "Lagos",
+        street: "Number 13, Adesola street, Olorunisola Road"
+    }
+
+
+]
    
 </script>
 

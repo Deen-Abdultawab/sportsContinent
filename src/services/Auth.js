@@ -55,35 +55,30 @@ export const logout = async ()=>{
   }
 }
 
-// export const logout = async ()=>{
-//   const token = useToken()
 
-//   if (!token) {
-//     console.warn('No token found, user might already be logged out.');
-//     return;
-//   }
-//   try {
-//     let res = await axios.post('auth/logout', {
-//       headers: {
-//         'Content-Type': 'application/json',
-//         'Authorization': `Bearer ${token}`
-//       }
-//     });
-//     catchAxiosSuccess(res);
-//   } catch (error) {
-//     catchAxiosError(error);
-//     throw error;
-//   }
-// }
+export const requestPasswordReset = async (email)=>{
+  let payload = {
+    "email": email
+  }
+  try {
+    let res = await axios.post('auth/forgot-password', payload)
+    catchAxiosSuccess(res)
+    console.log(res)
+    return res
+  } catch (error) {
+    console.log(error)
+    catchAxiosError(error)
+  }
+}
 
-export const requestPasswordResetToken = async ()=>{
-  // try {
-  //   let res = await medusa.customers.generatePasswordToken({
-  //     email: payload
-  //   })
-  //   return res
-  // } catch (error) {
-  //   console.log(error)
-  // }
+export const setNewPassword = async (payload)=>{
+  try {
+    let res = await axios.post('auth/reset-password', payload)
+    catchAxiosSuccess(res)
+    return res
+  } catch (error) {
+    console.log(error)
+    catchAxiosError(error)
+  }
 }
 

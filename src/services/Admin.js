@@ -119,6 +119,7 @@ export const createCategories = async (payload)=>{
     try {
         let res = await axios.post('category', payload)
         catchAxiosSuccess(res)
+        console.log(res)
         return res.data
     } catch (error) {
         console.log(error)
@@ -174,5 +175,14 @@ export const getSingleCustomer = async (slug)=>{
     } catch (error) {
         console.log(error)
         catchAxiosError(error)
+    }
+}
+
+export const getAddresses = async ()=>{
+    try {
+        let res = await axios.get('address')
+        return res.data
+    } catch (error) {
+        console.log(error)
     }
 }

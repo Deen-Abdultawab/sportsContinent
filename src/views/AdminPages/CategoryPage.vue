@@ -102,6 +102,7 @@
                                         class="!hidden"
                                         @change="uploadCategoryImage"
                                     >
+                                    <p>NB: Images should not exceed <span>20mb</span> in size</p>
                                 </article>
                                 <button 
                                     class="w-full bg-textCol text-white p-[0.5rem] rounded-[0.5rem] mt-[1rem]" 
@@ -194,6 +195,9 @@
             await handleGetCategories();
         } catch (error) {
             console.log(error);
+            toast.error("Image too large", {
+                timeout: 4000,
+            });
         } finally {
             isCreating.value = false;
         }

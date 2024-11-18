@@ -21,6 +21,7 @@ export default {
         'customGrid2': 'repeat(auto-fit, minmax(250px, 1fr))',
         'customGrid3': 'repeat(auto-fit, minmax(200px, 1fr))',
         'customGrid5': 'repeat(auto-fit, minmax(300px, 1fr))',
+        'customGrid6': 'repeat(auto-fit, minmax(150px, 1fr))',
         'customGrid4': '1.5fr 1fr',
       },
       screens: {

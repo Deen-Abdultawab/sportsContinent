@@ -30,7 +30,7 @@
                 id="email"
             />
         </div>
-        <button class="black_btn" @click="handleRequestToken">
+        <button class="black_btn hover:!bg-textCol hover:!text-white" @click="handleRequestToken">
             <Loader v-if="loading"/>
             <span v-else>Continue</span>
         </button>
@@ -44,6 +44,7 @@
 import Navbar from '@/components/Navbar.vue';
 import Footer from '@/components/Footer.vue';
 import AuthInput from "@/components/Forms/Inputs/AuthInputs/AuthInput.vue"
+import { requestPasswordReset } from '@/services/Auth';
 import { reactive, watch, computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from "vue-toastification";
@@ -83,7 +84,7 @@ watch(formState, () => {
 });
 
 const routeBack = ()=>{
-    router.back()
+    router.push({ name: 'signin'})
 }
 
 const validateForm = () => {
@@ -112,13 +113,10 @@ const handleRequestToken = async ()=>{
         return;
     }
     try {
-        
+        let res = await requestPasswordReset(formState.email)
         loading.value = false
     } catch (error) {
         console.log(error)
-        toast.error("user email does not exist", {
-          timeout: 4000,
-        });
         loading.value = false
     }
 }

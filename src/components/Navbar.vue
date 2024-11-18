@@ -151,7 +151,7 @@
 <script setup>
 import CloseIcon from '@/components/icons/CloseIcon.vue';
 import { useCurrencyStore } from '@/stores/currency';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import Counter from '@/components/Counter.vue';
 import { userStore } from '@/stores/user';
@@ -281,7 +281,13 @@ const handleRemoveItem = async (item_id)=>{
     }
 }
 
-// watch(cartItems.value, cartStore.updateCartCount, { deep: true })
+watch(
+  () => cartItems.value?.cart?.items?.length,
+  (newLength) => {
+    cartLength.value = newLength || 0; 
+  },
+  { immediate: true } 
+);
 
 onMounted( async () => {
     await store.getUser()

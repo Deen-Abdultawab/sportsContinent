@@ -40,18 +40,20 @@
           </article>
         </div>
       </div>
-      <div class="featured_products mt-[10rem] tab:mt-[6rem] w-[78%] mx-auto tab:w-full">
+      <div class="featured_products mt-[10rem] tab:mt-[6rem] w-[78%] mx-auto tab:!w-full">
         <h3 class="font-Raleway font-[700] text-textCol text-[3rem] leading-[3.6rem] mb-[2rem] mob2:text-[2.5rem]">Featured Products</h3>
         <div class="w-full h-full grid place-items-center" v-if="isLoading">
           <loader />
         </div>
-        <div class="featured_products_container flex gap-[1.5rem] flex-wrap justify-center" v-else>
+        <div class="featured_products_container grid grid-cols-customGrid6 gap-[1.5rem] justify-center mob:grid-cols-2" v-else>
           <ProductCard 
           v-for="(item, index) in featuredProducts?.slice(0,3)"
+          v-for="(item, index) in featuredProducts.slice(0,4)"
           :key="item.id"
           :product="item"
           @click="routeToProductDetails(item?.id)"
-          class="max-w-[20rem]"
+          class=" mob:!max-w-[full] w-full border border-textCol rounded-[0.5rem] shadow-lg"
+          :class="featuredProducts?.length < 2? 'max-w-[20rem]': ''"
           />
         </div>
       </div>

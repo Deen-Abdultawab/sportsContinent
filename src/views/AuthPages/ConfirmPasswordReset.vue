@@ -22,14 +22,6 @@
             Set new password for your account
          </p>
          <div class="mt-[3rem] mb-[2rem] flex flex-col gap-6">
-            <!-- <AuthInput
-                :error="errors.email"
-                :errorsMsg="errorsMsg?.email"
-                v-model="formData.email"
-                type="email"
-                placeholder="Email Address*"
-                id="email"
-            /> -->
             <PasswordInput
                 :error="errors.password"
                 :errorsMsg="errorsMsg?.password || !isValidPassword"
@@ -102,7 +94,7 @@
                 id="confirm_password"
             />
          </div>
-         <button class="black_btn" @click="handleResetPassword">
+         <button class="black_btn hover:!bg-textCol hover:!text-white" @click="handleResetPassword">
              <Loader v-if="loading"/>
              <span v-else>Continue</span>
          </button>
@@ -114,33 +106,27 @@
  <script setup>
  import Navbar from '@/components/Navbar.vue';
  import Footer from '@/components/Footer.vue';
- import AuthInput from "@/components/Forms/Inputs/AuthInputs/AuthInput.vue"
+ import { setNewPassword } from '@/services/Auth';
  import PasswordInput from "@/components/Forms/Inputs/AuthInputs/PasswordInput.vue";
  import { reactive, watch, computed, ref } from 'vue';
- import { useRouter } from 'vue-router';
+ import { useRoute, useRouter } from 'vue-router';
  import { useToast } from "vue-toastification";
  import Loader from "@/components/Loader/WhiteLoader.vue"
  
  const loading = ref(false)
  const router = useRouter()
+ const route = useRoute()
  const toast = useToast();
  const confirmPassword = ref('')
 
  const formData = reactive({
   password: "",
-  email: ""
 });
 
  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
 
- const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-
  const isValidPassword = computed(() => {
     return passwordRegex.test(formData.password);
-  });
-
-  const isValidEmail = computed(() => {
-    return emailRegex.test(formData.email);
   });
 
   const passwordsMatch = computed(() => {
@@ -168,17 +154,14 @@
   });
 
  const errors = reactive({
-   password: false,
-   email: false
+   password: false
  });
  
  const formState = reactive({
    password: "",
-   email: ""
  });
  
  const errorsMsg = {
-    email: "",
     confirmPassword: "",
     password: ""
  };
@@ -216,12 +199,6 @@
       isValid = false;
     }
   });
-
-  if (!isValidEmail.value) {
-    errors.email = true;
-    errorsMsg.email = "Email is required";
-    isValid = false;
-  }
  
   if (!isValidPassword.value) {
     errors.password = true;
@@ -245,24 +222,21 @@
          loading.value = false;
          return;
      }
+     let payload = {
+      "token": route.params.token,
+      "newPassword": formData.password
+     }
      try {
-        //  const res = await medusa.customers.resetPassword({
-        //     email: formState.email,
-        //     password: formState.password,
-        //     token: token,
-        //   })
-          
-        //  if(res.response.statustext === "OK"){
-        //      toast.success("Password Successfully Updated", {
-        //      timeout: 4000,
-        //    });
-        //  }
-         loading.value = false
+        let res = await setNewPassword(payload)
+        if(res?.statusText == "OK"){
+          router.push({ name: 'signin'})
+        }
+        loading.value = false
      } catch (error) {
          console.log(error)
-         toast.error("user email does not exist", {
-           timeout: 4000,
-         });
+         toast.error(`${error?.response?.data?.message}`, {
+          timeout: 4000,
+        });
          loading.value = false
      }
  }
