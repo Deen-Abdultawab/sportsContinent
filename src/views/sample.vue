@@ -1,330 +1,130 @@
-<template>
-  <section>
-      <dashboardLayout>
-          <div class="min-h-[100vh] h-full w-full grid place-items-center" v-if="isLoading">
-              <loader />
-          </div>
-          <section class="tab:w-[90%] tab:py-8 p-4 mx-auto dashboard-orders" v-else>
-              <div>
-                  <div class="">
-                      <h3 class="text-[#000000] font-[700] text-[1.5rem]">Product Details</h3>
-                      <p class="font-[600]">Home > All Products > {{ singleProduct?.name }}</p>
-                  </div>
-                  <div class="my-[1.5rem] bg-[#F8F8F8] p-[1.25rem] rounded-[1rem] grid grid-cols-customGrid4 tab:grid-cols-1 gap-[2rem]">
-                      <div class="w-full flex flex-col gap-[1.25rem]">
-                          <div class="w-full">
-                              <label class="text-[#232321] font-[600]">Product Name</label>
-                              <input type="text" placeholder="Lorem Ipsum" class=" mt-4 border border-[#232321] rounded-[0.5rem] w-full px-4 py-[0.95rem]" v-model="singleProduct?.name" :readonly="!isEditable">
-                          </div>
-                          <div class="w-full">
-                              <label class="text-[#232321] font-[600]">Description</label>
-                              <textarea placeholder="Lorem Ipsum" rows="7" class=" mt-4 border border-[#232321] rounded-[0.5rem] w-full px-4 py-[0.95rem]" 
-                              v-model="singleProduct?.description" :readonly="!isEditable"></textarea>
-                          </div>
-                          <div class="w-full">
-                              <label class="text-[#232321] font-[600]">Category</label>
-                              <input type="text" placeholder="Lorem Ipsum" class=" mt-4 border border-[#232321] rounded-[0.5rem] w-full px-4 py-[0.95rem]" value="Jersey" :readonly="!isEditable">
-                          </div>
-                          <div class="flex gap-[1.25rem]">
-                              <div class="w-full">
-                                  <InputField 
-                                      type="text"
-                                      placeholder="Lorem Ipsum"
-                                      v-model="singleProduct?.id"
-                                      title="Product ID"
-                                      :isEditable="!isEditable"
-                                  />
-                              </div>
-                              <div class="w-full">
-                                  <InputField 
-                                      type="text"
-                                      placeholder="Lorem Ipsum"
-                                      v-model="singleProduct?.stock"
-                                      title="Stock Quantity"
-                                      :isEditable="!isEditable"
-                                  />
-                              </div>
-                          </div>
-                          <div class="gap-[1.25rem]">
-                             <h3 class="text-[#232321] font-[600] mb-4">Prices</h3>
-                             <div class="flex flex-col gap-[1.25rem]">
-                              <article>
-                                  <h3 class="text-[#232321] font-[600]">$-USD:</h3>
-                                  <div class="flex items-center gap-[1.25rem]">
-                                      <InputField 
-                                          type="text"
-                                          placeholder="Lorem Ipsum"
-                                          v-model="stockQuantity"
-                                          title="Regular/Discounted Price"
-                                          :isEditable="!isEditable"
-                                      />
-                                      <InputField 
-                                          type="text"
-                                          placeholder="Lorem Ipsum"
-                                          v-model="stockQuantity"
-                                          title="Sale Price"
-                                          :isEditable="!isEditable"
-                                      />
-                                  </div>
-                              </article>
-                              <article>
-                                  <h3 class="text-[#232321] font-[600]">₦-NGN:</h3>
-                                  <div class="flex items-center gap-[1.25rem]">
-                                      <InputField 
-                                          type="text"
-                                          placeholder="Lorem Ipsum"
-                                          v-model="stockQuantity"
-                                          title="Regular/Discounted Price"
-                                          :isEditable="!isEditable"
-                                      />
-                                      <InputField 
-                                          type="text"
-                                          placeholder="Lorem Ipsum"
-                                          v-model="stockQuantity"
-                                          title="Sale Price"
-                                          :isEditable="!isEditable"
-                                      />
-                                  </div>
-                              </article>
-                              <article>
-                                  <h3 class="text-[#232321] font-[600]">£-GBP:</h3>
-                                  <div class="flex items-center gap-[1.25rem]">
-                                      <InputField 
-                                          type="text"
-                                          placeholder="Lorem Ipsum"
-                                          v-model="stockQuantity"
-                                          title="Regular/Discounted Price"
-                                          :isEditable="!isEditable"
-                                      />
-                                      <InputField 
-                                          type="text"
-                                          placeholder="Lorem Ipsum"
-                                          v-model="stockQuantity"
-                                          title="Sale Price"
-                                          :isEditable="!isEditable"
-                                      />
-                                  </div>
-                              </article>
-                              <article>
-                                  <h3 class="text-[#232321] font-[600]">Sizes</h3>
-                                  <div class="mt-4 border border-[#232321] rounded-[0.5rem] w-full px-4 py-[0.5rem] transitionItem h-[5rem]">
-                                      <div class="mb-[0.5rem] flex items-center gap-[0.5rem]">
-                                          <span 
-                                          v-for="size in productSizes" 
-                                          :key="size"
-                                          class="bg-[#36323B] rounded-[20px] py-[0.25rem] px-[1rem] text-[#E9E9EA] text-[0.7rem]">{{ size }}</span>
-                                      </div>
-                                      <input 
-                                          type="text" 
-                                          placeholder="enter size" 
-                                          class="capitalize bg-inherit w-full p-[0.2rem] focus:outline-none"
-                                          :readonly="!isEditable"
-                                          v-model="newSize" 
-                                          @keypress.enter="handleAddSize" 
-                                      >
-                                  </div>
-                              </article>
-                             </div>
-                          </div>
-                      </div>
-                      <div>
-                          <div class="rounded-[0.5rem] bg-[#00000033] h-[500px] w-full mb-[2rem] relative">
-                              <div class="absolute top-0 w-full  h-full flex-col items-center justify-center py-8 px-4 rounded-[0.5rem] border gap-[1.63rem] border-dashed border-[#232321] cursor-pointer" :class="isEditable? 'flex': 'hidden'">
-                                  <uploadIcon />
-                                  <h3>
-                                      Click to upload Images. <br> Jpeg, png are allowed
-                                  </h3>
-                              </div>
-                              <!-- <img src="" alt=""> -->
-                          </div>
-                          <div>
-                              <h3 class="text-[#232321] font-[600] mb-4">
-                                  Product Thumbnails
-                              </h3>
-                              <div>
-                                  <label for="fileUpload">
-                                      <div class="flex flex-col items-center justify-center py-8 px-4 rounded-[0.5rem] border gap-[1.63rem] border-dashed border-[#232321] mb-[1.25rem]" :class="!isEditable? 'cursor-not-allowed': 'cursor-pointer'">
-                                          <uploadIcon />
-                                          <h3>
-                                              Click to upload Images. <br> Jpeg, png are allowed
-                                          </h3>
-                                      </div>
-                                  </label>
-                                  <input 
-                                      type="file" 
-                                      name="fileUpload"
-                                      hidden 
-                                      id="fileUpload"
-                                      v-bind="$attrs"
-                                      class="!hidden"
-                                      @change="uploadFile"
-                                  >
-                              </div>
-
-                              <div class="flex flex-col gap-[1.25rem]">
-                                  <article class="flex items-center justify-between bg-[#FAFAFA] rounded-[0.5rem] py-4 px-[1.25rem]">
-                                      <div class="flex items-center gap-4">
-                                          <div class="w-[4rem] h-[4rem] bg-[#00000033] rounded-[0.5rem]">
+const handleCheckout = async () => {
+    // Construct comparison object
+    const comparisonObject = {
+      street: formData.address,
+      city: formData.city,
+      state: formData.state,
+      country: formData.country,
+      postalCode: formData.zip_code,
+    };
   
-                                          </div>
-                                          <div>
-                                              <h3 class="mb-4">Product thumbnail.png</h3>
-                                              <rangeBar />
-                                          </div>
-                                      </div>
-                                      <checkIcon />
-                                  </article>
-                                  <article class="flex items-center justify-between bg-[#FAFAFA] rounded-[0.5rem] py-4 px-[1.25rem]">
-                                      <div class="flex items-center gap-4">
-                                          <div class="w-[4rem] h-[4rem] bg-[#00000033] rounded-[0.5rem]">
+    // Find matching address
+    const match = findMatchingAddress(sortedAddresses.value, comparisonObject);
+    cartId.value = match ? match.id : cartId.value;
   
-                                          </div>
-                                          <div>
-                                              <h3 class="mb-4">Product thumbnail.png</h3>
-                                              <rangeBar />
-                                          </div>
-                                      </div>
-                                      <checkIcon />
-                                  </article>
-                                  <article class="flex items-center justify-between bg-[#FAFAFA] rounded-[0.5rem] py-4 px-[1.25rem]">
-                                      <div class="flex items-center gap-4">
-                                          <div class="w-[4rem] h-[4rem] bg-[#00000033] rounded-[0.5rem]">
+    // Build payload
+    const payload = sortedAddresses.value?.length > 0
+      ? { cartId: cartId.value, addressId: addressId.value }
+      : {
+          cartId: cartId.value,
+          shippingAddress: { ...comparisonObject },
+        };
   
-                                          </div>
-                                          <div>
-                                              <h3 class="mb-4">Product thumbnail.png</h3>
-                                              <rangeBar />
-                                          </div>
-                                      </div>
-                                      <checkIcon />
-                                  </article>
-                              </div>
-                          </div>
-                          {{ singleProduct }}
-                          <div class="w-full flex gap-4 mt-[4rem]">
-                              <button class="black_btn px-4 py-[0.75rem] rounded-[0.5rem] h-full capitalize w-full hover:!bg-textCol hover:!text-white" @click="toggleEdit">
-                                  {{ isEditable ? "Save" : "Update" }}
-                              </button>
-                              <button class="black_btn px-4 py-[0.75rem] rounded-[0.5rem] h-full capitalize w-full hover:!bg-textCol hover:!text-white" @click="deleteProduct(singleProduct?.id)">
-                                  <shortLoader v-if="isDeleting"/>
-                                  <span v-else>
-                                      delete
-                                  </span>
-                              </button>
-                              <button class="black_btn px-4 py-[0.75rem] rounded-[0.5rem] h-full capitalize w-full" v-if="isEditable" @click="cancelUpdate">
-                                  Cancel
-                              </button>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </section>
-      </dashboardLayout>
-  </section>
-  </template>
+    console.log("Payload:", payload);
   
-  <script setup>
-  import dashboardLayout from "@/components/ui/DashboardLayout.vue"
-  import { onMounted, ref, watch} from "vue";
-  import InputField from "@/components/ui/dashboard/InputField.vue";
-  import uploadIcon from "@/components/icons/UploadImageIcon.vue"
-  import checkIcon from "@/components/icons/CheckIcon.vue"
-  import rangeBar from "@/components/icons/LoadBarIcon.vue"
-  import { useAdminStore } from "@/stores/admin";
-  import loader from "@/components/Loader/Loader.vue"
-  import { storeToRefs } from "pinia";
-  import { useRoute } from "vue-router";
-  import shortLoader from "@/components/Loader/WhiteLoader.vue"
-
-
-  const isLoading = ref(false)
-  const isDeleting = ref(false)
-  const adminStore = useAdminStore()
-  const { singleProduct } = storeToRefs(adminStore)
-  const stockQuantity = ref(10)
-  const route = useRoute()
-  const productSizes = ref([])
-  const newSize = ref('')
-
-  // const getSizes = computed(()=>{
-  //     return productSizes.value = singleProduct.value?.sizes || []
-  // })
-
-  const getProductSizes = ()=>{
-      productSizes.value = [...singleProduct.value?.sizes] || []
-      return productSizes.value
-  }
-
-  const handleAddSize = () => {
-      if (newSize.value.trim()) {
-          productSizes.value.push(newSize.value.trim().toUpperCase()); // Add the size
-          newSize.value = ""; // Clear input field after adding
-      }
-  };
-
-  const isEditable = ref(false)
-
-  function toggleEdit() {
-      isEditable.value = !isEditable.value // Toggle the edit state
-  }
-
-  const cancelUpdate = ()=>{
-      isEditable.value = !isEditable.value // Toggle the edit state
-  }
-
-  const handleGetSingleProduct = async(slug)=>{
-      isLoading.value = true
-      try {
-          await adminStore.handleGetSingleProduct(slug)
-          isLoading.value = false
-      } catch (error) {
-          console.log(error)
-          isLoading.value = false
-      }
-  }
-
-  const deleteProduct = async(slug)=>{
-      isDeleting.value = true
-      try {
-          await adminStore.handleDeleteProduct(slug)
-          isDeleting.value = false
-      } catch (error) {
-          console.log(error)
-          isDeleting.value = false
-      }
-  }
-
-  const uploadFile = (event) => {
-      const file = event.target.files[0];
-      if (file) {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-          console.log(reader.result)
-      };
-
-      reader.readAsDataURL(file);
+    // Validation for form data completeness
+    const isFormDataComplete =
+      Object.values(comparisonObject).every((value) => value.length > 0) &&
+      formData.email.length > 0;
+  
+    if (!isFormDataComplete) {
+      toast.error("Billing address not complete", { timeout: 4000 });
+      return;
+    }
+  
+    // Create order and handle payments
+    isLoading.value = true;
+    try {
+      const res = await adminStore.handleCreateOrders(payload);
+      console.log("Order Response:", res);
+  
+      if (res?.status === 201) {
+        const paymentPayload = {
+          orderId: res.data?.order?.id,
+          email: formData.email,
+          amount: res.data?.order?.total,
+        };
+  
+        console.log("Payment Payload:", paymentPayload);
+  
+        const paymentRes = await adminStore.handleMakePayments(paymentPayload);
+        console.log("Payment Response:", paymentRes);
+  
+        if (paymentRes?.authorization_url) {
+          window.location.href = paymentRes.authorization_url;
+        }
       } else {
-      console.log(file)
+        toast.error("Failed to create order. Please try again.", { timeout: 4000 });
       }
+    } catch (error) {
+      console.error("Checkout Error:", error);
+      toast.error("An error occurred during checkout. Please try again.", { timeout: 4000 });
+    } finally {
+      isLoading.value = false; // Ensure loading state is reset
+    }
   };
 
-  watch(
-      () => singleProduct.value?.sizes, // Watch the `sizes` field within `singleProduct`
-      (newSizes) => {
-          productSizes.value = [...(newSizes || [])]; // Update `productSizes` when `sizes` changes
-      },
-      { immediate: true } // Ensure it runs immediately after mounting
-  );
-
-  onMounted(async()=>{
-      await handleGetSingleProduct(route.params.slug)
-      getProductSizes()
-      console.log(singleProduct.value)
-  })
-  
-  </script>
-  
-  <style lang="scss" scoped>
-  
-  </style>
+  const handleCheckout = async ()=>{
+    // create order
+   const payload = ref({})
+   const comparisionObject =  {
+       street: formData.address,
+       city: formData.city,
+       state: formData.state,
+       country: formData.country,
+       postalCode: formData.zip_code
+   }
+   let match = findMatchingAddress(sortedAddresses.value, comparisionObject)
+   console.log(sortedAddresses.value[0], comparisionObject)
+   cartId.value = match ? match.id : cartId.value
+   if(sortedAddresses.value?.length > 0){
+       payload.value = {
+           "cartId": cartId.value,
+           "addressId": addressId.value,
+       }
+   } else {
+       payload.value = {
+           "cartId": cartId.value,
+           "shippingAddress": {
+               "street": formData.address,
+               "city": formData.city,
+               "state": formData.state,
+               "country": formData.country,
+               "postalCode": formData.zip_code
+           }
+       }
+   }
+   console.log(payload.value)
+   isLoading.value = true
+   try {
+       if(formData.address.length > 0 && formData.city.length > 0 && formData.state.length > 0 && formData.country.length > 0 && formData.zip_code.length > 0 && formData.email.length > 0) {
+           // let res = await adminStore.handleCreateOrders(payload.value)
+           // console.log(res)
+           if(res?.status == 201 ){
+               // let payload = {
+               //     "orderId": res.data?.order?.id,
+               //     "email": formData.email,
+               //     "amount": res.data?.order?.total
+               // };
+               // console.log(payload)
+               // let paymentRes = await adminStore.handleMakePayments(payload)
+               // console.log(paymentRes)
+               // if(paymentRes?.authorization_url){
+               //     window.location.href = paymentRes?.authorization_url;
+               // }
+           } else {
+               isLoading.value = false
+               return
+           }
+           isLoading.value = false
+       } else {
+           toast.error("billing address not complete", {
+           timeout: 4000,
+         });
+         isLoading.value = false
+       }
+   } catch (error) {
+       console.log(error)
+       isLoading.value = false
+   }
+}

@@ -2,7 +2,7 @@ import axios from "axios";
 import { useRouter } from "vue-router";
 import { useToast } from 'vue-toastification';
 
-axios.defaults.baseURL = import.meta.env.VITE_BACKEND_BASEURL_STAGING;
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_BASEURL;
 axios.defaults.withCredentials = true; // Enable credentials for all axios requests
 
 const toast = useToast();
@@ -22,7 +22,7 @@ axios.interceptors.response.use(
         timeout: 4000
       });
       localStorage.clear();
-      router.push('/signin');
+      router.push('/admin');
     }
     return Promise.reject(error);
   }

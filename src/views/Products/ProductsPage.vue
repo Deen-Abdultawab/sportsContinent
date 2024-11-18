@@ -50,7 +50,9 @@
                     <h3 class="text-[1.5rem] font-[600] font-Raleway">No result for this search parameter</h3>
                 </div>
                 <div v-else>
-                    <div class="featured_products_container grid grid-cols-customGrid6 gap-[1.5rem] mb-[2.5rem] tab:grid-cols-customGrid3">
+                    <div class="featured_products_container grid grid-cols-customGrid6 gap-[1.5rem] mb-[2.5rem] tab:grid-cols-customGrid3"
+                    :class="paginatedProducts?.length < 2? 'max-w-[22rem]': ''"
+                    >
                         <ProductCard 
                             v-for="(item, index) in paginatedProducts"
                             :key="index"

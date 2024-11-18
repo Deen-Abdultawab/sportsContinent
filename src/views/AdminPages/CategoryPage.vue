@@ -4,7 +4,7 @@
             <div v-if="isLoading" class="w-full h-full grid place-items-center">
                 <loader />   
             </div>
-            <section class="p-4 mx-auto dashboard-orders min-h-[100vh]" v-else>
+            <section class="p-4 mx-auto dashboard-orders min-h-[100vh] pb-[5rem]" v-else>
                 <div>
                     <div class="">
                         <h3 class="text-[#000000] font-[700] text-[1.5rem]">Collections</h3>

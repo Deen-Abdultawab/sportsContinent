@@ -105,6 +105,14 @@ const routeToDashboard = ()=>{
 const handleLogOut = async ()=>{
   try {
     let res = await logout()
+    
+    if(localStorage.getItem('_cart_id')){
+        localStorage.removeItem('_cart_id')
+    }
+    
+    if (localStorage.getItem('_user_data')) {
+        localStorage.removeItem('_user_data')
+    }
     router.push({ name: 'admin'})
     console.log(res)
   } catch (error) {
