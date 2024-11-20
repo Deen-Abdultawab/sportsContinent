@@ -53,7 +53,7 @@
                     <div class="grid grid-cols-customGrid2 gap-4">
                         <article 
                             class="flex flex-col gap-[1.25rem] cursor-pointer hover:scale-105 transitionItem rounded-lg p-4"
-                            v-for="(product, index) in paginatedProducts"
+                            v-for="(product, index) in filteredProducts"
                             :key="index"
                             :id="product?.id"
                             :class="products?.products?.length < 2? 'max-w-[22rem]': ''"
@@ -127,6 +127,7 @@ const handleGetProducts = async ()=>{
 }
 
 const setActiveCategory = async (slug) => {
+    currentPage.value = 1
   activeCategory.value = slug;
   activeSlug.value = slug
 };
@@ -199,6 +200,14 @@ const paginatedProducts = computed(() => {
 
 
 const totalPages = computed(()=>products.value?.totalPages)
+
+// const totalPages = computed(() => {
+//   // Ensure categoryFiltered.value is an array before trying to access its length
+//   if (Array.isArray(filteredProducts.value)) {
+//     return Math.ceil(filteredProducts.value?.length / 10); // Round up to the nearest whole number
+//   }
+//   return 0; // Default value if categoryFiltered.value is not an array
+// });
 
 const setPage = async (page) => {
     if (page < 1 || page > totalPages.value) return;
