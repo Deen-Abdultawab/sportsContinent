@@ -43,8 +43,13 @@
                                             <td class="p-4 border-b">
                                                {{ category?.description }}
                                             </td>
-                                            <th class="p-4 border-b text-right" @click="deleteCategory(category?.id)">
-                                                <DeleteIcon class="w-[1.2rem] h-[1.2rem] inline" />
+                                            <th class="p-4 border-b text-right flex items-center justify-end gap-[0.5rem]">
+                                                <span @click="initiateUpdateCategory(category?.name, category?.description, category?.image, category?.id)">
+                                                    <editIcon />
+                                                </span>
+                                                <span @click="deleteCategory(category?.id)">
+                                                    <DeleteIcon class="w-[1.2rem] h-[1.2rem] inline" />
+                                                </span>
                                             </th>
                                         </tr>
                                     </tbody>
@@ -87,7 +92,7 @@
                                     <h3 class="font-[500]">Select Category Image</h3>
                                     <label for="categoryImage">
                                         <div  
-                                            class="border border-textCol p-[0.5rem] rounded-[0.3rem] bg-inherit focus:outline-none text-[1rem] mt-[0.3rem] w-full grid place-items-center cursor-pointer bgStyle"
+                                            class="border border-textCol p-[0.5rem] rounded-[0.3rem] bg-inherit focus:outline-none text-[1rem] mt-[0.3rem] w-full grid place-items-center cursor-pointer bgStyle h-[12rem]"
                                             :style="{ backgroundImage: `url(${bgImage})` }"
                                         >
                                             <UploadImageIcon class="w-[2rem]" />
@@ -102,19 +107,27 @@
                                         class="!hidden"
                                         @change="uploadCategoryImage"
                                     >
-                                    <p>NB: Images should not exceed <span>20mb</span> in size</p>
+                                    <p class="mt-4 mb-12">NB: Images should not exceed <span>20mb</span> in size</p>
                                 </article>
                                 <button 
                                     class="w-full bg-textCol text-white p-[0.5rem] rounded-[0.5rem] mt-[1rem]" 
                                     @click="handleCreateCategory"
+                                    v-if="!isEdit"
                                 >
                                     <whiteLoader v-if="isCreating"/>
                                     <span v-else>Submit</span>
                                 </button>
+                                <button 
+                                    class="w-full bg-textCol text-white p-[0.5rem] rounded-[0.5rem] mt-[1rem]" 
+                                    @click="updateCategory"
+                                    v-else
+                                >
+                                    <whiteLoader v-if="isUpdating"/>
+                                    <span v-else>Update</span>
+                                </button>
                             </div>
                         </transition>
                     </div>
-
                 </div>
             </section>
         </dashboardLayout>
@@ -132,13 +145,15 @@
     import UploadImageIcon from "@/components/icons/UploadImageIcon.vue"
     import { useToast } from "vue-toastification";
     import CategoryIcon from "@/components/icons/CategoryIcon.vue"
+    import editIcon from "@/components/icons/editIcon.vue";
     
 
     const showCreateCategory = () => {
         showCreateCats.value = !showCreateCats.value
     }
+
     const adminStore = useAdminStore()
-    const { categories, createResponse } = storeToRefs(adminStore)
+    const { categories } = storeToRefs(adminStore)
     const isLoading = ref(false)
     const categoryName = ref('')
     const categoryDescription = ref('')
@@ -146,13 +161,16 @@
     const bgImage = ref('')
     const isCreating = ref(false)
     const toast = useToast()
+    const isEdit = ref(false)
+    const isUpdating = ref(false)
+    const categoryId = ref('')
+    const currentImage = ref('')
 
     const deleteCategory = async (id)=>{
         isLoading.value = true
         try {
             let res = await adminStore.handleDeleteCategories(id)
             await handleGetCategories()
-            console.log(res)
             isLoading.value = false
         } catch (error) {
             console.log(error)
@@ -179,20 +197,25 @@
             "description": categoryDescription.value,
             "image": bgImage.value
         };
-        console.log(payload);
         try {
-            await adminStore.handleCreateCategories(payload);
-            toast.success("Category created successfully", {
+            let res = await adminStore.handleCreateCategories(payload);
+            if( res?.statusText == "Created"){
+                toast.success("Category created successfully", {
+                    timeout: 4000,
+                });
+                // Autofill form fields
+                categoryName.value = '';
+                categoryDescription.value = '';
+                bgImage.value = '';
+                showCreateCats.value = false; // Hide the creation form
+    
+                // Fetch the latest categories
+                await handleGetCategories();
+            } else {
+                toast.error("Error creating category, ensure image size is within allowed limits", {
                 timeout: 4000,
             });
-            // Clear form fields
-            categoryName.value = '';
-            categoryDescription.value = '';
-            bgImage.value = '';
-            showCreateCats.value = false; // Hide the creation form
-
-            // Fetch the latest categories
-            await handleGetCategories();
+            }
         } catch (error) {
             console.log(error);
             toast.error("Image too large", {
@@ -216,6 +239,50 @@
         reader.readAsDataURL(file);
         } else {
         console.log(file)
+        }
+    };
+
+    const initiateUpdateCategory = async (name, descr, image, slug)=> {
+        isEdit.value = true
+        categoryName.value = name
+        categoryDescription.value = descr
+        bgImage.value = image
+        categoryId.value = slug
+        currentImage.value = image
+        showCreateCategory()
+        
+        window.scrollTo({
+            top: document.body.scrollHeight, // Scroll to the bottom
+            behavior: 'smooth' // Add smooth scrolling
+        });
+    }
+
+    const updateCategory = async () => {
+        isUpdating.value = true;
+        
+        let payload = {
+            "name": categoryName.value,
+            "slug": categoryName.value?.toLowerCase().replace(/\s+/g, "-"),
+            "description": categoryDescription.value,
+        };
+
+        // Only add the image if it's new or modified
+        if (currentImage.value !== bgImage.value) {
+            payload.image = bgImage.value;
+        }
+
+        try {
+            let res = await adminStore.handleEditCategories(payload, categoryId.value)
+            if(res?.statusText == "OK"){
+                toast.success("Category created successfully", {
+                    timeout: 4000,
+                });
+                showCreateCategory()
+            }
+            isUpdating.value = false;
+        } catch (error) {
+            console.log(error);
+            isUpdating.value = false;
         }
     };
 

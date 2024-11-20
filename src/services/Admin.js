@@ -120,7 +120,7 @@ export const createCategories = async (payload)=>{
         let res = await axios.post('category', payload)
         catchAxiosSuccess(res)
         console.log(res)
-        return res.data
+        return res
     } catch (error) {
         console.log(error)
         catchAxiosError(error)
@@ -152,6 +152,17 @@ export const getProductsByCategories = async(slug)=>{
     try {
         let res = await axios.get(`products/category/${slug}`)
         return res.data
+    } catch (error) {
+        console.log(error)
+        catchAxiosError(error)
+    }
+}
+
+export const editCategories = async (payload, slug)=> {
+    try {
+        let res = await axios.put(`category/${slug}`, payload)
+        catchAxiosSuccess(res)
+        return res
     } catch (error) {
         console.log(error)
         catchAxiosError(error)
