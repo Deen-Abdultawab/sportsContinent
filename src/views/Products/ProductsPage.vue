@@ -47,32 +47,46 @@
             </div>
             <div v-else>
                 <div v-if="filteredProducts?.length < 1" class="w-full h-full min-h-[100vh]">
-                    <h3 class="text-[1.5rem] font-[600] font-Raleway">No result for this search parameter</h3>
+                    <h3 class="text-[1.5rem] font-[600] font-Raleway">No result for this search parameter on this page</h3>
                 </div>
                 <div v-else>
-                    <div class="featured_products_container grid grid-cols-customGrid6 gap-[1.5rem] mb-[2.5rem] tab:grid-cols-customGrid3"
-                    :class="paginatedProducts?.length < 2? 'max-w-[22rem]': ''"
-                    >
-                        <ProductCard 
-                            v-for="(item, index) in paginatedProducts"
+                    <div class="grid grid-cols-customGrid2 gap-4">
+                        <article 
+                            class="flex flex-col gap-[1.25rem] cursor-pointer hover:scale-105 transitionItem rounded-lg p-4"
+                            v-for="(product, index) in paginatedProducts"
                             :key="index"
-                            :product="item"
-                            @click="routeToProductDetails(item?.id)"
-                            class=" mob:!max-w-[full] w-full border border-textCol rounded-[0.5rem] shadow-lg"
-                        />
+                            :id="product?.id"
+                            :class="products?.products?.length < 2? 'max-w-[22rem]': ''"
+                            @click="routeToProductDetails(product?.id)"
+                        >
+                            <div class="flex-1 min-h-[250px]">
+                                <img 
+                                :src="product?.images[0]" 
+                                alt="Product Image" 
+                                class="w-full h-full object-cover rounded-lg mb-4"
+                                />
+                            </div>
+                            <div class="text-center">
+                                <h3 class="font-Raleway font-[700] text-[0.875rem] leading-[1.05rem] text-textCol">{{product?.name}}</h3>
+                                <div class="items-end font-openSans font-[400] text-textCol mt-[0.2rem]">
+                                    <span class="old_price text-[0.75rem] line-through mr-[0.5rem] leading-[0.9rem]" v-if="product?.discountPrice">{{ getCurrencySymbol(product?.currency) }}{{ product?.discountPrice }}</span>
+                                    <span class="current_price text-[1rem] leading-[1.2rem]">{{ getCurrencySymbol(product?.currency) }}{{ product?.price?.toLocaleString() }}</span>
+                                </div>
+                            </div>
+                        </article>
                     </div>
-                    <div class="pagination flex items-center justify-center gap-[1.5rem] mb-[5.3rem]">
-                        <div class="flex gap-[1.5rem] items-center">
-                            <button
-                            class="font-openSans font-[400] text-[1rem] leading-[1.2rem] text-textCol p-[0.5rem] rounded-full"
-                            @click="setPage(page)"
-                            v-for="page in paginationButtons"
-                            :key="page"
-                            :class="page === currentPage ? 'text-white bg-textCol': ''"
-                            >{{ page }}</button>
-                        </div>
-                        <PaginationArrowIcon class="cursor-pointer" @click="setPage(currentPage + 1)" v-if="currentPage < totalPages"/>
+                </div>
+                <div class="pagination flex items-center justify-center gap-[1.5rem] mb-[5.3rem]">
+                    <div class="flex gap-[1.5rem] items-center">
+                        <button
+                        class="font-openSans font-[400] text-[1rem] leading-[1.2rem] text-textCol p-[0.5rem] rounded-full"
+                        @click="setPage(page)"
+                        v-for="page in totalPages"
+                        :key="page"
+                        :class="page === currentPage ? 'text-white bg-textCol': ''"
+                        >{{ page }}</button>
                     </div>
+                    <PaginationArrowIcon class="cursor-pointer" @click="setPage(currentPage + 1)" v-if="currentPage < totalPages"/>
                 </div>
             </div>
         </div>
@@ -83,17 +97,15 @@
 <script setup>
 import Navbar from '@/components/Navbar.vue';
 import Footer from '@/components/Footer.vue';
-import { ref, computed, onMounted, onUnmounted, nextTick, watch} from "vue";
+import { ref, computed, onMounted, watch} from "vue";
 import { useRoute, useRouter } from 'vue-router';
-import ProductCard from '@/components/ui/ProductCard.vue';
 import PaginationArrowIcon from '@/components/icons/PaginationArrowIcon.vue';
 import { storeToRefs } from "pinia";
-import { useProductsStore } from "@/stores/products"
 import { useAdminStore } from '@/stores/admin';
 import loader from "@/components/Loader/Loader.vue"
 
 const adminStore = useAdminStore()
-const { products, categories, currentCurrency, filteredProduct } = storeToRefs(adminStore)
+const { products, categories, currentCurrency } = storeToRefs(adminStore)
 const router = useRouter()
 const route = useRoute()
 const isLoading = ref(false)
@@ -101,8 +113,18 @@ const currentPage = ref(1)
 const activeCategory = ref(null)
 const activeSlug = ref('')
 const sortOption = ref('');
-const itemsPerPage = 10;
 
+const handleGetProducts = async ()=>{
+    isLoading.value = true
+    try {
+        await adminStore.handleGetProducts(currentPage.value, currentCurrency.value)
+        await adminStore.handleGetCategories()
+        isLoading.value = false
+    } catch (error) {
+        console.log(error)
+        isLoading.value = false
+    }
+}
 
 const setActiveCategory = async (slug) => {
   activeCategory.value = slug;
@@ -110,7 +132,7 @@ const setActiveCategory = async (slug) => {
 };
 
 const filteredProducts = computed(()=>{
-    let filtered = products.value.products;
+    let filtered = products.value?.products;
 
     if(activeSlug.value?.length > 0){
         if(activeSlug.value === "All"){
@@ -137,9 +159,6 @@ const filteredProducts = computed(()=>{
     } else if (sortOption.value === 'Alphabetically: Z-A') {
         filtered = filtered.sort((a, b) => b.name.localeCompare(a.name));
     }
-
-
-
     return filtered
 })
 
@@ -156,33 +175,30 @@ const querySearch = ()=>{
     }
 }
 
-const handleGetProducts = async ()=>{
-    isLoading.value = true
-    try {
-        await adminStore.handleGetProducts(currentPage.value, currentCurrency.value)
-        await adminStore.handleGetCategories()
-        isLoading.value = false
-    } catch (error) {
-        console.log(error)
-        isLoading.value = false
+const getCurrencySymbol = (currencyCode) => {
+    switch (currencyCode) {
+        case 'USD':
+        return '$';
+        case 'GBP':
+        return '£';
+        case 'NGN':
+        return '₦';
+        default:
+        return ''; // Default symbol if currency code is unknown
     }
-}
+};
+
+const productsData = computed(()=> products.value?.products || [])
 
 const paginatedProducts = computed(() => {
-    const start = (currentPage.value - 1) * itemsPerPage;
-    const end = start + itemsPerPage;
-    return filteredProducts.value?.slice(start, end);
+    const perPage = products.value?.pageSize;
+    const start = (currentPage.value - 1) * perPage;
+    const end = start + perPage;
+    return productsData.value;
 });
 
-const paginationButtons = computed(() => {
-    return Array.from({ length: totalPages.value }, (_, i) => i + 1);
-});
 
-const totalPages = computed(() => {
-    const totalFiltered = filteredProducts.value?.length;
-    
-    return Math.ceil(totalFiltered / itemsPerPage);
-});
+const totalPages = computed(()=>products.value?.totalPages)
 
 const setPage = async (page) => {
     if (page < 1 || page > totalPages.value) return;
@@ -201,26 +217,6 @@ onMounted(async()=>{
     await adminStore.updateCurrency(currentCurrency.value)
     await handleGetProducts()
 })
-    const pages = [
-        {
-            num:1
-        },
-        {
-            num:2
-        },
-        {
-            num:3
-        },
-        {
-            num:4
-        },
-        {
-            num:5
-        },
-        {
-            num:6
-        },
-    ]
 </script>
 
 <style lang="scss" scoped>
