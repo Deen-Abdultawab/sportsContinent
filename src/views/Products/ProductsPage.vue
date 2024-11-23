@@ -69,28 +69,56 @@
                     </div>
                     <div class="grid grid-cols-customGrid2 gap-4" v-else>
                         <article 
-                            class="flex flex-col gap-[1.25rem] cursor-pointer hover:scale-105 transitionItem rounded-lg p-4"
+                            class="flex flex-col gap-[1.25rem] cursor-pointer hover:scale-105 transitionItem rounded-lg p-4 relative"
                             v-for="(product, index) in filteredProducts"
                             :key="index"
                             :id="product?.id"
-                            :class="products?.products?.length < 2? 'max-w-[22rem]': ''"
+                            :class="[
+                            products?.products?.length < 2 ? 'max-w-[22rem]' : '',
+                            product?.stock < 1 ? 'pointer-events-none opacity-50 cursor-not-allowed' : ''
+                            ]"
                             @click="routeToProductDetails(product?.id)"
                         >
+                            <!-- Overlay for Out of Stock -->
+                            <div 
+                                class="overlay bg-transparent absolute top-0 left-0 w-full h-full backdrop-blur-[4px] pointer-events-all text-center cursor-not-allowed" 
+                                v-if="product?.stock < 1"
+                            >
+                                <div class="grid place-items-center w-full h-full">
+                                    <h3 class="text-[red] font-Raleway font-[600] capitalize bg-white p-4">
+                                        Item sold out
+                                    </h3>
+                                </div>
+                            </div>
+
+                            <!-- Product Image -->
                             <div class="flex-1 min-h-[250px]">
                                 <img 
-                                :src="product?.images[0]" 
-                                alt="Product Image" 
-                                class="w-full h-full object-cover rounded-lg mb-4"
+                                    :src="product?.images[0]" 
+                                    alt="Product Image" 
+                                    class="w-full h-full object-cover rounded-lg mb-4"
                                 />
                             </div>
+
+                            <!-- Product Details -->
                             <div class="text-center">
-                                <h3 class="font-Raleway font-[700] text-[0.875rem] leading-[1.05rem] text-textCol">{{product?.name}}</h3>
+                                <h3 class="font-Raleway font-[700] text-[0.875rem] leading-[1.05rem] text-textCol">
+                                    {{ product?.name }}
+                                </h3>
                                 <div class="items-end font-openSans font-[400] text-textCol mt-[0.2rem]">
-                                    <span class="old_price text-[0.75rem] line-through mr-[0.5rem] leading-[0.9rem]" v-if="product?.discountPrice">{{ getCurrencySymbol(product?.currency) }}{{ product?.discountPrice }}</span>
-                                    <span class="current_price text-[1rem] leading-[1.2rem]">{{ getCurrencySymbol(product?.currency) }}{{ product?.price?.toLocaleString() }}</span>
+                                    <span 
+                                        class="old_price text-[0.75rem] line-through mr-[0.5rem] leading-[0.9rem]" 
+                                        v-if="product?.discountPrice"
+                                    >
+                                        {{ getCurrencySymbol(product?.currency) }}{{ product?.discountPrice }}
+                                    </span>
+                                    <span class="current_price text-[1rem] leading-[1.2rem]">
+                                        {{ getCurrencySymbol(product?.currency) }}{{ product?.price?.toLocaleString() }}
+                                    </span>
                                 </div>
                             </div>
                         </article>
+
                     </div>
 
                 </div>
@@ -107,6 +135,11 @@
                             :class="paginatedProducts?.length < 2? 'max-w-[22rem]': ''"
                             @click="routeToProductDetails(product?.id)"
                         >
+                            <div class="overlay bg-transparent absolute top-0 left-0 w-full h-full backdrop-blur-[4px] cursor-not-allowed text-center" v-if="product?.stock < 1">
+                                <div class="grid place-items-center w-full h-full">
+                                    <h3 class="text-[red] font-Raleway font-[600] capitalize bg-white p-4">Item sold out</h3>
+                                </div>
+                            </div>
                             <div class="flex-1 min-h-[250px]">
                                 <img 
                                 :src="product?.images[0]" 
