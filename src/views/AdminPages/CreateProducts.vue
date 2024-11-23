@@ -282,7 +282,7 @@
     };
 
     const saveChanges = async ()=> {
-        if (!productDetails.name || !productDetails.price || !productDetails.categoryId || parseInt(productDetails.stock) < 1) {
+        if (!productDetails.name || !productDetails.price || !productDetails.categoryId || parseInt(productDetails.stock) < 1 || productDetails.images?.length < 1) {
             toast.error("Please complete all required fields.");
             isLoading.value = false;
             return;

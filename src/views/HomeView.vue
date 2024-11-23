@@ -6,7 +6,7 @@
       <!-- <video src="https://res.cloudinary.com/dfnecyrhc/video/upload/v1731546288/Sports%20Continent/ntdsnoue2wlme5rclrdf.mp4" autoplay muted loop playsinline class="h-full w-full object-cover mob:object-cover absolute z-[-1]" poster="../assets/images/header_img.png"></video> -->
       <div class="pt-[10rem] pl-[9.75rem] w-[50.08%] tab2:w-[90%] tab2:pl-[2rem]">
         <div class="animate__animated animate__fadeInLeft animate__slow">
-          <h1 class="font-Raleway font-[700] text-[#FFFFFF] text-[3rem] leading-[3.6rem]">Shop easy, Ball hard</h1>
+          <h1 class="font-Raleway font-[700] text-[#FFFFFF] text-[3rem] leading-[3.6rem] capitalize">Shop easy, Ball hard</h1>
           <p class="font-openSans font-[400] text-[1rem] leading-[1.2rem] text-[#FFFFFF] w-[82%] my-[1.5rem]">Experience the best in sports fashion with SportsContinent. Shop our exclusive range of jerseys, tracksuits, polos, and sport caps. Every piece tells a story.</p>
           <router-link :to="{name: 'allProducts'}">
             <button class="bg-[#007646] py-[0.75rem] px-[1.5rem] rounded-[12.5rem] font-openSans text-[1.2rem] font-[400] leading-[1.2rem] mob:py-[0.9rem] mob:w-[50%] text-[#FFFFFF] border-0">Shop Now</button>
