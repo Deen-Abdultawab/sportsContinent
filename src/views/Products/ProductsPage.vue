@@ -132,14 +132,23 @@
                             v-for="(product, index) in paginatedProducts"
                             :key="product?.id"
                             :id="product?.id"
-                            :class="paginatedProducts?.length < 2? 'max-w-[22rem]': ''"
+                            :class="[
+                            products?.products?.length < 2 ? 'max-w-[22rem]' : '',
+                            product?.stock < 1 ? 'pointer-events-none opacity-50 cursor-not-allowed' : ''
+                            ]"
                             @click="routeToProductDetails(product?.id)"
                         >
-                            <div class="overlay bg-transparent absolute top-0 left-0 w-full h-full backdrop-blur-[4px] cursor-not-allowed text-center" v-if="product?.stock < 1">
+                        <div 
+                                class="overlay bg-transparent absolute top-0 left-0 w-full h-full backdrop-blur-[4px] pointer-events-all text-center cursor-not-allowed" 
+                                v-if="product?.stock < 1"
+                            >
                                 <div class="grid place-items-center w-full h-full">
-                                    <h3 class="text-[red] font-Raleway font-[600] capitalize bg-white p-4">Item sold out</h3>
+                                    <h3 class="text-[red] font-Raleway font-[600] capitalize bg-white p-4">
+                                        Item sold out
+                                    </h3>
                                 </div>
                             </div>
+                            
                             <div class="flex-1 min-h-[250px]">
                                 <img 
                                 :src="product?.images[0]" 
