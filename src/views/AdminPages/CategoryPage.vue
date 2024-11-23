@@ -257,6 +257,13 @@
         });
     }
 
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,        // Scroll to the top of the page
+            behavior: 'smooth', // Smooth scrolling animation
+        });
+    };
+
     const updateCategory = async () => {
         isUpdating.value = true;
         
@@ -287,6 +294,7 @@
     };
 
     onMounted(async()=>{
+            scrollToTop()
             await handleGetCategories()
     })
     </script>

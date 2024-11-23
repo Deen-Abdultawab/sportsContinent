@@ -351,6 +351,7 @@
   });
   
   onMounted(async()=>{
+      scrollToTop()
     querySearch()
     await adminStore.getCurrency()
     await adminStore.updateCurrency(currentCurrency.value)

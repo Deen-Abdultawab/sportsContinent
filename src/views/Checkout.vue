@@ -290,7 +290,15 @@ const autoFillAddress = ()=>{
     }
 }
 
+const scrollToTop = () => {
+    window.scrollTo({
+        top: 0,        // Scroll to the top of the page
+        behavior: 'smooth', // Smooth scrolling animation
+    });
+};
+
 onMounted(async()=>{
+    scrollToTop()
     await store.getUser()
     await cartStore.handleGetCart()
     await adminStore.handleGetAddresses()

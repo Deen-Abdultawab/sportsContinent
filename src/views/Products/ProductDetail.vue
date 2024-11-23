@@ -209,6 +209,13 @@
     mainUrl.value = item;
   };
 
+  const scrollToTop = () => {
+      window.scrollTo({
+          top: 0,        // Scroll to the top of the page
+          behavior: 'smooth', // Smooth scrolling animation
+      });
+  };
+
   const handleUpdatedValue = (newValue) => {
     quantity.value = newValue
   };
@@ -219,6 +226,7 @@
   });
 
   onMounted(async()=>{
+    scrollToTop()
       await adminStore.getCurrency()
       await adminStore.updateCurrency(currentCurrency.value)
       await handleGetSingleProduct(route.params.slug, currentCurrency.value)
