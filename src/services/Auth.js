@@ -49,6 +49,7 @@ export const logout = async ()=>{
       }
     });
     catchAxiosSuccess(res);
+    return res
   } catch (error) {
     catchAxiosError(error);
     throw error;

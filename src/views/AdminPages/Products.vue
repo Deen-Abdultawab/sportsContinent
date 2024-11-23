@@ -22,7 +22,7 @@
                     </div>
                   
                     <div class="my-[1.5rem]">
-                        <div v-if="filteredProduct.length < 1">
+                        <div v-if="filteredProduct?.length < 1">
                             <h3 class="text-[1.5rem] font-[600] font-Raleway">No result for this search parameter on this page</h3>
                         </div>
                         <div class="grid grid-cols-customGrid2 gap-4" v-else>
@@ -56,8 +56,8 @@
                                 <!-- Sales and Remaining Products -->
                                 <div class="flex justify-between items-center text-gray-600 text-sm mt-4">
                                     <div class="flex items-center">
-                                        <span>📊</span>
-                                        <p class="ml-2">Sales: 0</p>
+                                        <!-- <span>📊</span>
+                                        <p class="ml-2">Sales: 0</p> -->
                                     </div>
                                     <div class="flex items-center">
                                         <span>📉</span>

@@ -297,13 +297,11 @@ const handleSignup = async () => {
     }
     try {
         const res = await registerCustomer(payload)
-        store.saveUser(res?.data?.user)
-        loading.value = false
-        router.go(-1)
-        console.log(red)
-        if(res.statusText == "Created"){
-          console.log('signedup')
+        if(res?.statusText == "Created"){
+          store.saveUser(res?.data?.user)
+          router.go(-1)
         }
+        loading.value = false
     } catch (error) {
         console.log(error)
         toast.error(`${error.response.data.error}`, {

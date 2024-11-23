@@ -187,23 +187,25 @@ const handleCurrencyChange =async () => {
 
 const handleLogout = async () =>{
     try {
-        // await logout();
-        handleCloseNavDrop()
-        user.value = null
-        if(localStorage.getItem('_cart_id')){
-            localStorage.removeItem('_cart_id')
-        }
-        
-        if (localStorage.getItem('_user_data')) {
-            localStorage.removeItem('_user_data')
-        }
-        cartCount.value = 0
-        cartLength.value = 0
-        if(route.name === "home"){
-            router.push({ name: "signin" });
-        } else {
-            router.push({ name: "home" });
-        }
+       let res = await logout();
+       if(res?.statusText == "OK"){
+           handleCloseNavDrop()
+           user.value = null
+           if(localStorage.getItem('_cart_id')){
+               localStorage.removeItem('_cart_id')
+           }
+           
+           if (localStorage.getItem('_user_data')) {
+               localStorage.removeItem('_user_data')
+           }
+           cartCount.value = 0
+           cartLength.value = 0
+           if(route.name === "home"){
+               router.push({ name: "signin" });
+           } else {
+               router.push({ name: "home" });
+           }
+       }
     } catch (error) {
         console.log(error)
     }
