@@ -17,8 +17,8 @@
             
             <div class="flex-1 flex-grow">
                 <nav class="flex w-full bg-[#FAFAFA] justify-end desk:justify-between py-[1rem] px-[3.75rem] !sticky top-0 min-[370px]:pt-5 items-center z-[999]">
-                    <div class="logo w-[4rem] h-[4rem] cursor-pointer desk:block hidden" @click="routeToDashboard">
-                        <img src="@/assets/images/logo.png" alt="">
+                    <div class="logo w-[7rem] h-[2rem] cursor-pointer desk:block hidden" @click="routeToDashboard">
+                        <img src="@/assets/images/logoImg.jpeg" alt="">
                     </div>
                     <div class="hidden lg:flex items-end gap-[2.5rem]">
                         <!-- <SearchIcon /> -->
@@ -105,16 +105,17 @@ const routeToDashboard = ()=>{
 const handleLogOut = async ()=>{
   try {
     let res = await logout()
-    console.log(res)
-    
-    if(localStorage.getItem('_cart_id')){
-        localStorage.removeItem('_cart_id')
+    if(res?.statusText == "OK"){
+      if(localStorage.getItem('_cart_id')){
+          localStorage.removeItem('_cart_id')
+      }
+      
+      if (localStorage.getItem('_user_data')) {
+          localStorage.removeItem('_user_data')
+      }
+      router.push({ name: 'admin'})
     }
     
-    if (localStorage.getItem('_user_data')) {
-        localStorage.removeItem('_user_data')
-    }
-    router.push({ name: 'admin'})
   } catch (error) {
     console.log(error)
   }

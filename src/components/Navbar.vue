@@ -6,8 +6,8 @@
             @click="handleNavDropTogggle"
             >MENU</div>
             <router-link to="/">
-                <div class="w-[3.625rem] h-[3.75rem] overflow-hidden">
-                    <img src="@/assets/images/logo.png" alt="logo image" class="w-full h-full">
+                <div class="w-[auto] h-[5.75rem] overflow-hidden">
+                    <img src="@/assets/images/logoImg.jpeg" alt="logo image" class="w-full h-full">
                 </div>
             </router-link>
             <div class="navBtn"

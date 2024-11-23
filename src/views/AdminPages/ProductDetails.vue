@@ -303,7 +303,6 @@
             "stock": parseInt(productDetails.stock)
          }
         try {
-            console.log(payload, route.params.slug)
             let res = await handleUpdateProduct(route?.params?.slug, payload)
             console.log(res)
             toast.success("product updated successfully", {

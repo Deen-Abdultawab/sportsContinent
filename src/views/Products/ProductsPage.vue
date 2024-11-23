@@ -5,7 +5,7 @@
             <!-- {{ filteredProducts }} -->
             <h3 class="font-Raleway font-[700] text-[3rem] leading-[3.6rem] text-textCol mb-[1.5rem]">All Products</h3>
             <div>
-                <div class="w-[20%] mob:w-[50%] mob:py-[0.6rem] rounded-[5rem] flex items-center gap-4 py-4 bg-[#009759] justify-center mb-8 cursor-pointer hover:bg-[#0e3323] transitionItem" @click="toggleShowFilter">
+                <div class="w-[20%] mob:w-[50%] rounded-[5rem] flex items-center gap-4 py-[0.5rem] bg-[#009759] justify-center mb-8 cursor-pointer hover:bg-[#0e3323] transitionItem" @click="toggleShowFilter">
                     <h3 class="text-[1.5rem] text-white font-Raleway">Filter</h3>
                     <FilterIcon class="text-white w-[2rem] h-[2rem]"/>
                 </div>
@@ -148,7 +148,7 @@
                                     </h3>
                                 </div>
                             </div>
-                            
+
                             <div class="flex-1 min-h-[250px]">
                                 <img 
                                 :src="product?.images[0]" 

@@ -169,7 +169,7 @@
     const deleteCategory = async (id)=>{
         isLoading.value = true
         try {
-            let res = await adminStore.handleDeleteCategories(id)
+            await adminStore.handleDeleteCategories(id)
             await handleGetCategories()
             isLoading.value = false
         } catch (error) {

@@ -302,13 +302,12 @@
         };
         try {
              let res = await handleCreateProduct(payload)
-             if(res?.statusText == "Created"){
-                 toast.success("product created successfully", {
-                     timeout: 4000,
-                 });
-                 router.push({ name: 'products'})
-                 isEditable.value = !isEditable.value
-            }
+             console.log(res)
+             toast.success("product created successfully", {
+                 timeout: 4000,
+             });
+             router.push({ name: 'products'})
+             isEditable.value = !isEditable.value
         } catch (error) {
             console.log(error)
         }

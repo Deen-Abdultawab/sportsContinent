@@ -1,7 +1,7 @@
 <template>
     <section class="bg-[#FAFAFA] flex items-center flex-col w-[100%] dashboard h-screen min-h-[100vh] font-Raleway pt-[1.96rem] border border-l-[#007646]">
-        <div class="logo w-[4rem] h-[4rem] cursor-pointer desk:hidden" @click="routeToDashboard">
-            <img src="@/assets/images/logo.png" alt="">
+        <div class="logo w-[auto] h-[4rem] cursor-pointer desk:hidden" @click="routeToDashboard">
+            <img src="@/assets/images/logoImg.jpeg" alt="">
         </div>
         <ul class="w-full px-4 flex flex-col gap-4 mt-[2rem]">
             <li>
