@@ -128,7 +128,7 @@
                     </div>
                     <div v-else class="grid grid-cols-customGrid2 gap-4">
                         <article 
-                            class="flex flex-col gap-[1.25rem] cursor-pointer hover:scale-105 transitionItem rounded-lg p-4"
+                            class="flex flex-col gap-[1.25rem] cursor-pointer hover:scale-105 transitionItem rounded-lg p-4 relative"
                             v-for="(product, index) in paginatedProducts"
                             :key="product?.id"
                             :id="product?.id"
