@@ -301,7 +301,6 @@
             "categoryId": productDetails.categoryId,
         };
         try {
-            console.log(payload)
              await handleCreateProduct(payload)
             console.log(createResponse.value)
             toast.success("product created successfully", {
@@ -344,7 +343,6 @@
 
     onMounted(async()=>{
         await adminStore.handleGetCategories()
-        console.log(categories.value)
     })
     
     </script>

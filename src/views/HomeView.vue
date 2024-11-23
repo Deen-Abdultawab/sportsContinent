@@ -28,7 +28,7 @@
           class="flex flex-col gap-[1.25rem] cursor-pointer mob:basis-[70%] pr-8"
           v-for="item in categories?.category"
           :key="item.id"
-          @click="routeToProductSearch(item?.name)"
+          @click="routeToProductSearch(item?.slug)"
           >
             <div class="rounded-[0.75rem] overflow-hidden min-w-[20rem] w-[20rem] min-h-[20rem] max-h-[20rem] border border-textCol">
               <img :src="item?.image" :alt="item?.name">
@@ -111,12 +111,10 @@ watch(currentCurrency, async (newCurrency) => {
 });
 
 const routeToProductDetails = (slug)=>{
-  console.log(slug)
     router.push({ name: 'product_detail', params: { slug}})
 }
 
 const routeToProductSearch = (slug)=>{
-  console.log(slug)
   router.push({
     name: "allProducts",
     query: {

@@ -182,6 +182,7 @@ const cartLength = ref(0)
 const handleCurrencyChange =async () => {
   await adminStore.updateCurrency(currentCurrency.value)
   localStorage.setItem('currency', currentCurrency.value);
+  handleCloseNavDrop()
 };
 
 const handleLogout = async () =>{
@@ -292,7 +293,6 @@ watch(
 onMounted( async () => {
     await store.getUser()
     if(user.value){
-        console.log(user.value)
         await cartStore.handleGetCart()
         cartStore.updateCartCount()
         cartLength.value = cartItems.value?.cart?.items?.length

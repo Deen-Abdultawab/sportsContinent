@@ -171,9 +171,9 @@ export const useAdminStore = defineStore('admin', ()=>{
         }
     }
 
-    const handleProductByCategory = async (slug)=>{
+    const handleProductByCategory = async (slug, currency)=>{
         try {
-            filteredProduct.value = await getProductsByCategories(slug)
+            filteredProduct.value = await getProductsByCategories(slug, currency)
             return filteredProduct.value
         } catch (error) {
             console.log(error)

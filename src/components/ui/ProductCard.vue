@@ -5,7 +5,7 @@
   >
   <!-- {{ props.product }} -->
       <div class="rounded-[0.75rem] overflow-hidden h-full w-full max-h-[15rem] !rounded-b-none">
-          <img :src="props?.product?.images[0]" alt="" class="object-fill h-full w-full">
+          <img :src="props?.product?.images[0]" alt="" class="object-contain h-full w-full">
       </div>
       <div class="text-center">
           <h3 class="font-Raleway font-[700] text-[0.875rem] leading-[1.05rem] text-textCol">{{ props?.product?.name}}</h3>

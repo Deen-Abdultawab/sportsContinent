@@ -6,12 +6,20 @@
             </div>
             <section class="p-4 mx-auto dashboard-orders" v-else>
                 <div>
-                    <div class="">
-                        <h3 class="text-[#000000] font-[700] text-[1.5rem]">Orders List</h3>
-                        <p class="font-[600]">Home > Order List</p>
+                    <div class="flex justify-between">
+                        <div class="">
+                            <h3 class="text-[#000000] font-[700] text-[1.5rem]">Orders List</h3>
+                            <p class="font-[600]">Home > Order List</p>
+                        </div>
+                        <div>
+                                <input type="text" placeholder="Search order id" class="text-textCol font-Raleway px-4 py-[0.75rem] h-full rounded-[0.5rem] border border-textCol focus:outline-none bg-inherit" v-model="orderId">
+                            </div>
                     </div>
-                    <div class="my-[1.5rem]">
-                        <orderTable title="Recent Purchases" :orders="orders"/>
+                    <div v-if="filteredOrder?.length < 1" class="mt-[1.5rem]">
+                        <h3 class="text-[1.5rem] font-[600] font-Raleway">Order with this Id does not exist</h3>
+                    </div>
+                    <div class="my-[1.5rem]" v-else>
+                        <orderTable title="Recent Purchases" :orders="filteredOrder"/>
                     </div>
                 </div>
             </section>
@@ -21,7 +29,7 @@
     
     <script setup>
     import dashboardLayout from "@/components/ui/DashboardLayout.vue"
-    import { ref, onMounted } from "vue";
+    import { ref, onMounted, computed } from "vue";
     import orderTable from "@/components/ui/dashboard/OrderTable.vue"
     import { storeToRefs } from 'pinia';
     import { useAdminStore } from "@/stores/admin"
@@ -31,6 +39,23 @@
     const adminStore = useAdminStore()
     const { orders } = storeToRefs(adminStore)
     const isLoading = ref(false)
+    const orderId = ref('')
+
+    const filteredOrder = computed(()=>{
+        let filtered = orders.value
+
+        if(orderId.value?.length > 0){
+            filtered = filtered.filter((item)=>{
+                const itemId = '#' + item?.orderNumber.toLowerCase().trim();
+                const inputId = orderId.value?.toLowerCase().trim()
+                if(itemId.includes(inputId)){
+                    return item
+                }
+            })
+        }
+
+        return filtered
+    })
 
     const handleGetAllOrders = async ()=>{
       isLoading.value = true

@@ -300,6 +300,7 @@ const handleSignup = async () => {
         store.saveUser(res?.data?.user)
         loading.value = false
         router.go(-1)
+        console.log(red)
         if(res.statusText == "Created"){
           console.log('signedup')
         }
@@ -316,7 +317,6 @@ const handleSignup = async () => {
 
 onMounted(()=>{
   const urlString = window.location.href;
-  console.log(urlString)
 })
 
 
