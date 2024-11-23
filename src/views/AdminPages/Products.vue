@@ -6,23 +6,31 @@
             </div>
             <section class="p-4 mx-auto dashboard-orders" v-else>
                 <div>
-                    <div class="flex items-center justify-between">
-                        <div>
+                    <div class="flex items-center justify-between mob:justify-end">
+                        <div class="mob:hidden">
                             <h3 class="text-[#000000] font-[700] text-[1.5rem]">All Products</h3>
                             <p class="font-[600]">Home > All Products</p>
                         </div>
-                        <button class="black_btn px-4 py-[0.75rem] rounded-[0.5rem] h-full" @click="routeToCreate">
-                            Create New Product
-                        </button>
+                        <div class="flex gap-4">
+                            <div>
+                                <input type="text" placeholder="Search product name" class="text-textCol font-Raleway px-4 py-[0.75rem] h-full rounded-[0.5rem] border border-textCol focus:outline-none bg-inherit" v-model="productName">
+                            </div>
+                            <button class="black_btn px-4 py-[0.75rem] rounded-[0.5rem] h-full" @click="routeToCreate">
+                                Create New Product
+                            </button>
+                        </div>
                     </div>
                   
                     <div class="my-[1.5rem]">
-                        <div class="grid grid-cols-customGrid2 gap-4">
+                        <div v-if="filteredProduct?.length < 1">
+                            <h3 class="text-[1.5rem] font-[600] font-Raleway">No result for this search parameter on this page</h3>
+                        </div>
+                        <div class="grid grid-cols-customGrid2 gap-4" v-else>
                             <div 
-                                v-for="(product, index) in products?.products" 
+                                v-for="(product, index) in filteredProduct" 
                                 :key="product?.id" 
                             class="bg-[#F8F8F8] rounded-lg shadow-md p-4 cursor-pointer hover:shadow-xl transitionItem flex flex-col" :id="product?.id"
-                            :class="products?.products?.length < 2? 'max-w-[22rem]': ''"
+                            :class="filteredProduct?.length < 2? 'max-w-[22rem]': ''"
                             @click="routeToDetails(product?.id)"
                             >
                                  <div class="flex-1 min-h-[250px]">
@@ -48,8 +56,8 @@
                                 <!-- Sales and Remaining Products -->
                                 <div class="flex justify-between items-center text-gray-600 text-sm mt-4">
                                     <div class="flex items-center">
-                                        <span>📊</span>
-                                        <p class="ml-2">Sales: 0</p>
+                                        <!-- <span>📊</span>
+                                        <p class="ml-2">Sales: 0</p> -->
                                     </div>
                                     <div class="flex items-center">
                                         <span>📉</span>
@@ -96,6 +104,7 @@ const adminStore = useAdminStore()
 const { products } = storeToRefs(adminStore)
 const router = useRouter()
 const currentPage = ref(1)
+const productName = ref('')
 
 const routeToDetails = (slug)=>{
     router.push({ name: 'productDetails', params: { slug}})
@@ -115,6 +124,23 @@ const handleGetProducts = async ()=>{
         isLoading.value = false
     }
 }
+
+const filteredProduct = computed(()=>{
+    let filtered = products.value?.products
+
+    if(productName.value){
+        filtered = filtered.filter((item)=>{
+            const itemName = item?.name?.toLowerCase().trim();
+            const inputName = productName.value?.toLowerCase().trim()
+            if(itemName.includes(inputName)){
+                return item
+            }
+        })
+    }
+
+    return filtered
+
+})
 
 const getCurrencySymbol = (currencyCode) => {
     switch (currencyCode) {
@@ -136,7 +162,15 @@ const setPage = async(page)=>{
     await handleGetProducts(currentPage.value)
 }
 
+const scrollToTop = () => {
+    window.scrollTo({
+        top: 0,        // Scroll to the top of the page
+        behavior: 'smooth', // Smooth scrolling animation
+    });
+};
+
 onMounted(async()=>{
+    scrollToTop()
     await handleGetProducts(currentPage.value)
 })
 

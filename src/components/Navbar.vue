@@ -1,13 +1,13 @@
 <template>
     <nav class="bg-[#FFFFFF] relative">
-        <div class="nav_center w-[78.3%] tab:w-[90%] mx-auto flex items-center justify-between py-[0.9rem]">
+        <div class="nav_center w-[78.3%] tab:w-[90%] mx-auto flex items-center justify-between py-[0.5rem]">
             <div 
             class="navBtn"
             @click="handleNavDropTogggle"
             >MENU</div>
             <router-link to="/">
-                <div class="w-[3.625rem] h-[3.75rem] overflow-hidden">
-                    <img src="@/assets/images/logo.png" alt="logo image" class="w-full h-full">
+                <div class="w-[auto] h-[5.75rem] overflow-hidden">
+                    <img src="@/assets/images/logoImg.jpeg" alt="logo image" class="w-full h-full">
                 </div>
             </router-link>
             <div class="navBtn"
@@ -182,27 +182,30 @@ const cartLength = ref(0)
 const handleCurrencyChange =async () => {
   await adminStore.updateCurrency(currentCurrency.value)
   localStorage.setItem('currency', currentCurrency.value);
+  handleCloseNavDrop()
 };
 
 const handleLogout = async () =>{
     try {
-        // await logout();
-        handleCloseNavDrop()
-        user.value = null
-        if(localStorage.getItem('_cart_id')){
-            localStorage.removeItem('_cart_id')
-        }
-        
-        if (localStorage.getItem('_user_data')) {
-            localStorage.removeItem('_user_data')
-        }
-        cartCount.value = 0
-        cartLength.value = 0
-        if(route.name === "home"){
-            router.push({ name: "signin" });
-        } else {
-            router.push({ name: "home" });
-        }
+       let res = await logout();
+       if(res?.statusText == "OK"){
+           handleCloseNavDrop()
+           user.value = null
+           if(localStorage.getItem('_cart_id')){
+               localStorage.removeItem('_cart_id')
+           }
+           
+           if (localStorage.getItem('_user_data')) {
+               localStorage.removeItem('_user_data')
+           }
+           cartCount.value = 0
+           cartLength.value = 0
+           if(route.name === "home"){
+               router.push({ name: "signin" });
+           } else {
+               router.push({ name: "home" });
+           }
+       }
     } catch (error) {
         console.log(error)
     }
@@ -292,7 +295,6 @@ watch(
 onMounted( async () => {
     await store.getUser()
     if(user.value){
-        console.log(user.value)
         await cartStore.handleGetCart()
         cartStore.updateCartCount()
         cartLength.value = cartItems.value?.cart?.items?.length

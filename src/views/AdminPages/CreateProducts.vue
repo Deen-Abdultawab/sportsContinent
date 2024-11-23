@@ -282,7 +282,7 @@
     };
 
     const saveChanges = async ()=> {
-        if (!productDetails.name || !productDetails.price || !productDetails.categoryId) {
+        if (!productDetails.name || !productDetails.price || !productDetails.categoryId || parseInt(productDetails.stock) < 1) {
             toast.error("Please complete all required fields.");
             isLoading.value = false;
             return;
@@ -301,14 +301,13 @@
             "categoryId": productDetails.categoryId,
         };
         try {
-            console.log(payload)
-             await handleCreateProduct(payload)
-            console.log(createResponse.value)
-            toast.success("product created successfully", {
-                timeout: 4000,
-            });
-            router.push({ name: 'products'})
-            isEditable.value = !isEditable.value
+             let res = await handleCreateProduct(payload)
+             console.log(res)
+             toast.success("product created successfully", {
+                 timeout: 4000,
+             });
+             router.push({ name: 'products'})
+             isEditable.value = !isEditable.value
         } catch (error) {
             console.log(error)
         }
@@ -344,7 +343,6 @@
 
     onMounted(async()=>{
         await adminStore.handleGetCategories()
-        console.log(categories.value)
     })
     
     </script>

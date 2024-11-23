@@ -22,7 +22,7 @@ axios.interceptors.response.use(
         timeout: 4000
       });
       localStorage.clear();
-      router.push('/admin');
+      router.push('/signin');
     }
     return Promise.reject(error);
   }

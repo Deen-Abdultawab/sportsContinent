@@ -303,7 +303,6 @@
             "stock": parseInt(productDetails.stock)
          }
         try {
-            console.log(payload, route.params.slug)
             let res = await handleUpdateProduct(route?.params?.slug, payload)
             console.log(res)
             toast.success("product updated successfully", {
@@ -390,7 +389,15 @@
         { immediate: true } // This ensures it runs immediately on component load
     );
 
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,        // Scroll to the top of the page
+            behavior: 'smooth', // Smooth scrolling animation
+        });
+    };
+
     onMounted(async()=>{
+        scrollToTop()
         await handleGetSingleProduct(route?.params?.slug)
         await adminStore.handleGetCategories()
         productSizes.value = singleProduct.value?.sizes

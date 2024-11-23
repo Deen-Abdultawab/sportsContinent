@@ -148,9 +148,9 @@ export const getCategories = async ()=>{
     }
 }
 
-export const getProductsByCategories = async(slug)=>{
+export const getProductsByCategories = async(slug, currency)=>{
     try {
-        let res = await axios.get(`products/category/${slug}`)
+        let res = await axios.get(`products/category/${slug}?currency=${currency}`)
         return res.data
     } catch (error) {
         console.log(error)
