@@ -1,6 +1,6 @@
 <template>
     <nav class="bg-[#FFFFFF] relative">
-        <div class="nav_center w-[78.3%] tab:w-[90%] mx-auto flex items-center justify-between py-[0.9rem]">
+        <div class="nav_center w-[78.3%] tab:w-[90%] mx-auto flex items-center justify-between py-[0.5rem]">
             <div 
             class="navBtn"
             @click="handleNavDropTogggle"

@@ -20,7 +20,7 @@
                 <div class="grid grid-cols-customGrid2 gap-4">
                     <article class="flex justify-between bg-[#eae8e8] p-4 rounded-[0.5rem] shadow-lg hover:shadow-xl transitionItem cursor-pointer gap-4" 
                     @click="routeToProduct(item?.productId)"
-                    v-for="item in analytics?.data?.topSellingProducts"
+                    v-for="item in analytics?.data?.topSellingProducts?.slice(0,3)"
                     :key="item?.productId"
                     :data-id="item?.productId"
                     >
