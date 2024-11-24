@@ -298,6 +298,7 @@
             "sizes": productDetails.sizes,
             "isFeatured": productDetails.isFeatured,
             "stock": parseInt(productDetails.stock),
+            "originalStock": parseInt(productDetails.stock),
             "categoryId": productDetails.categoryId,
         };
         try {

@@ -56,8 +56,8 @@
                                 <!-- Sales and Remaining Products -->
                                 <div class="flex justify-between items-center text-gray-600 text-sm mt-4">
                                     <div class="flex items-center">
-                                        <!-- <span>📊</span>
-                                        <p class="ml-2">Sales: 0</p> -->
+                                        <span v-if="product?.originalStock">📊</span>
+                                        <p class="ml-2" v-if="product?.originalStock">Sales: {{ product?.originalStock - product?.stock }}</p>
                                     </div>
                                     <div class="flex items-center">
                                         <span>📉</span>

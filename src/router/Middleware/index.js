@@ -24,7 +24,7 @@ const redirectDashboard = () => {
 
   // Only redirect if the user is not an admin and not already on the admin pages
   if (!isAdmin && isAdminPage) {
-    return { name: 'home' }; // Redirect non-admin users to home or another page
+    return { name: 'admin' }; // Redirect non-admin users to home or another page
   }
 
   // Allow admin users to access dashboard
