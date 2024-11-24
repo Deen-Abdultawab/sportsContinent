@@ -110,8 +110,8 @@ export const useAdminStore = defineStore('admin', ()=>{
 
     const handleCreateProducts = async (payload)=>{
         try {
-            createResponse.value = await createProducts(payload)
-            return createResponse.value
+            let res = await createProducts(payload)
+            return res
         } catch (error) {
             console.log(error)
         }

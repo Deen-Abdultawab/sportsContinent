@@ -300,7 +300,8 @@
             "description": productDetails.description,
             "isFeatured": productDetails.isFeatured,
             "categoryId": productDetails.categoryId,
-            "stock": parseInt(productDetails.stock)
+            "stock": parseInt(productDetails.stock),
+            "originalStock": parseInt(productDetails.stock),
          }
         try {
             let res = await handleUpdateProduct(route?.params?.slug, payload)
