@@ -19,7 +19,7 @@
           </div>
         </div>
         <div class="product_info w-[50%] tab2:w-full flex flex-col gap-[2rem] pt-12">
-          <h1 class="product_name font-Raleway font-[700] text-textCol text-[2.5rem] leading-[3rem] mob:text-[2rem] mob:leading-[2rem]">
+          <h1 class="product_name font-Raleway font-[700] text-textCol text-[2.5rem] leading-[3rem] mob:text-[2rem] mob:leading-[2rem] uppercase">
             {{ singleProduct?.name}}
           </h1>
           <p class="font-openSans font-[400] text-[1.2rem] leading-[1.2rem]">

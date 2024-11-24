@@ -102,7 +102,7 @@
 
                             <!-- Product Details -->
                             <div class="text-center">
-                                <h3 class="font-Raleway font-[700] text-[0.875rem] leading-[1.05rem] text-textCol">
+                                <h3 class="font-Raleway font-[700] text-[0.875rem] leading-[1.05rem] text-textCol uppercase">
                                     {{ product?.name }}
                                 </h3>
                                 <div class="items-end font-openSans font-[400] text-textCol mt-[0.2rem]">

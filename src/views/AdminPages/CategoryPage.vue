@@ -37,10 +37,10 @@
                                                 <div class="form-check">
                                                 </div>
                                             </td>
-                                            <td class="p-4 border-b">
+                                            <td class="p-4 border-b uppercase">
                                                 {{ category?.name }}
                                             </td>
-                                            <td class="p-4 border-b">
+                                            <td class="p-4 border-b uppercase">
                                                {{ category?.description }}
                                             </td>
                                             <th class="p-4 border-b text-right flex items-center justify-end gap-[0.5rem]">

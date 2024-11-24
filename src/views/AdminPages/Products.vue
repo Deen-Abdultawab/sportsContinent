@@ -43,13 +43,13 @@
                                 
                                 <!-- Product Title and Price -->
                                 <div class="mb-2">
-                                <h3 class="text-lg font-semibold">{{ product?.name }}</h3>
-                                <p class="text-sm text-gray-500">{{ product?.category?.name }}</p>
+                                <h3 class="text-lg font-semibold uppercase">{{ product?.name }}</h3>
+                                <p class="text-sm text-gray-500 uppercase">{{ product?.category?.name }}</p>
                                 <p class="font-bold text-lg mt-2">{{ getCurrencySymbol(product?.currency) }}{{ product?.price.toLocaleString() }}</p>
                                 </div>
                                 
                                 <!-- Product Summary -->
-                                <p class="text-gray-600 text-sm mb-4">
+                                <p class="text-gray-600 text-sm mb-4 uppercase">
                                 {{ product?.description }}
                                 </p>
 
