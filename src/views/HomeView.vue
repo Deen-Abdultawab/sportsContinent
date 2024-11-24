@@ -34,7 +34,7 @@
               <img :src="item?.image" :alt="item?.name">
             </div>
             <div class="flex items-center justify-between">
-              <h3 class="font-Raleway font-[700] text-[2rem] leading-[2.4rem] capitalize">{{ item?.name }}</h3>
+              <h3 class="font-Raleway font-[700] text-[2rem] leading-[2.4rem] uppercase">{{ item?.name }}</h3>
               <RightArrowIcon />
             </div>
           </article>
