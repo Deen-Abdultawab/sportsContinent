@@ -300,7 +300,6 @@ onMounted( async () => {
     await store.getUser()
     await userProfile.customerProfile()
     if(customer.value?.data){
-        console.log(customer.value)
         await cartStore.handleGetCart()
         cartStore.updateCartCount()
         cartLength.value = cartItems.value?.cart?.items?.length
