@@ -154,7 +154,7 @@ export const getProductsByCategories = async(slug, currency)=>{
         return res.data
     } catch (error) {
         console.log(error)
-        catchAxiosError(error)
+        // catchAxiosError(error)
     }
 }
 
@@ -169,9 +169,9 @@ export const editCategories = async (payload, slug)=> {
     }
 }
 
-export const getAllCustomers = async ()=>{
+export const getAllCustomers = async (page)=>{
     try {
-        let res = await axios.get(`customers`)
+        let res = await axios.get(`customers?page=${page}`)
         return res.data
     } catch (error) {
         console.log(error)

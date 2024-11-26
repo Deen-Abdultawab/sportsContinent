@@ -30,6 +30,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <!-- {{ customers?.data?.pagination }} -->
                                         <!-- {{ customers.data.customers }} -->
                                         <tr 
                                         v-for="(customer, index) in customers?.data?.customers" 
@@ -74,6 +75,18 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="flex justify-start items-end mt-[4rem]">
+                        <div class="flex">
+                            <button
+                            v-for="i in totalPages"
+                            class="px-4 py-[0.5rem] border border-[#232321] rounded mx-1 hover:bg-textCol hover:!text-[white] transitionItem"
+                            @click="setPage(i)"
+                            :class="i === currentPage ? 'bg-textCol text-white': ''"
+                            v-if="totalPages > 1"
+                            >{{ i }}</button>
+                        </div>
+                    </div>
             </section>
         </dashboardLayout>
     </section>
@@ -81,7 +94,7 @@
     
     <script setup>
     import dashboardLayout from "@/components/ui/DashboardLayout.vue"
-    import { ref, onMounted } from "vue";
+    import { ref, onMounted, computed } from "vue";
     import { useRouter } from "vue-router"
     import userIcon from "@/components/icons/UserIcon.vue"
     import { useAdminStore } from "@/stores/admin";
@@ -92,16 +105,6 @@
     const isLoading = ref(false)
     const adminStore = useAdminStore()
     const { customers } = storeToRefs(adminStore)
-    const formattedDate = ref('')
-
-    const orders = ref([
-        { id: '25426', date: 'Nov 8, 2023', customerName: 'Kavin Abba', avatar: 'https://picsum.photos/seed/kavin/50', status: 'kevinabba@gmail.com', amount: 2 },
-        { id: '25425', date: 'Nov 7, 2023', customerName: 'Komael Azr', avatar: 'https://picsum.photos/seed/komael/50', status: 'azr124@yahoo.com', amount: 2 },
-        { id: '25424', date: 'Nov 6, 2023', customerName: 'Nikhil Mikahil', avatar: 'https://picsum.photos/seed/nikhil/50', status: 'mikinikki@gmail.com', amount: 3 },
-        { id: '25423', date: 'Nov 5, 2023', customerName: 'Shivam Rashid', avatar: 'https://picsum.photos/seed/shivam/50', status: 'shivamrash@gmail.com', amount: 4 },
-        { id: '25422', date: 'Nov 4, 2023', customerName: 'Shadab dihar', avatar: 'https://picsum.photos/seed/shadab/50', status: 'shadhir@gmail.com', amount: 3 },
-        { id: '25421', date: 'Nov 2, 2023', customerName: 'Yoges diharh', avatar: 'https://picsum.photos/seed/yogesh/50', status: 'dhiyo@yahoo.com', amount: 4 },
-    ]);
 
     const routeToDetail = (slug)=>{
         router.push({ name: 'customerDetail', params: { slug }})
@@ -119,7 +122,7 @@
     const handleGetCustomers = async ()=>{
         isLoading.value = true
         try {
-            await adminStore.handleGetCustomers()
+            await adminStore.handleGetCustomers(1)
             isLoading.value = false
         } catch (error) {
             console.log(error)
@@ -127,7 +130,30 @@
         }
     }
 
+    // pagination
+
+    const pagination = computed(()=>customers.value?.data?.pagination)
+    const currentPage = ref(1)
+
+    const totalPages = computed(()=>pagination.value?.totalPages)
+
+    const setPage = async(page)=>{
+        scrollToTop()
+        if(page !== currentPage.value){
+            currentPage.value = page
+            await handleGetProducts(currentPage.value)
+        }
+    }
+
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,        // Scroll to the top of the page
+            behavior: 'smooth', // Smooth scrolling animation
+        });
+    };
+
     onMounted(async()=>{
+        scrollToTop()
         await handleGetCustomers()
     })
     
