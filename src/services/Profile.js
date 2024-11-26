@@ -10,7 +10,7 @@ export const getCustomer = async () => {
         })
         return res.data
     } catch (error) {
-        catchAxiosError(error)
+        // catchAxiosError(error)
         throw error
     }
 }

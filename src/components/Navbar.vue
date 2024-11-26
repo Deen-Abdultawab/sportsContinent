@@ -158,12 +158,15 @@ import { userStore } from '@/stores/user';
 import { logout } from '@/services/Auth';
 import { useToast } from "vue-toastification";
 import { storeToRefs } from "pinia";
+import { useUserProfile } from '@/stores/profile';
 
 import { useCartStore } from '@/stores/cart';
 import { useAdminStore } from "@/stores/admin"
 import loader from "@/components/Loader/ShortLoader.vue"
 
+const userProfile = useUserProfile()
 const adminStore = useAdminStore()
+const { customer } = storeToRefs(userProfile)
 const { currentCurrency } = storeToRefs(adminStore)
 const cartStore = useCartStore()
 const toast = useToast();
@@ -200,6 +203,7 @@ const handleLogout = async () =>{
            }
            cartCount.value = 0
            cartLength.value = 0
+           customer.value = {}
            if(route.name === "home"){
                router.push({ name: "signin" });
            } else {
@@ -294,7 +298,8 @@ watch(
 
 onMounted( async () => {
     await store.getUser()
-    if(user.value){
+    await userProfile.customerProfile()
+    if(customer.value?.data){
         await cartStore.handleGetCart()
         cartStore.updateCartCount()
         cartLength.value = cartItems.value?.cart?.items?.length
@@ -315,7 +320,7 @@ onMounted( async () => {
 <style scoped>
  .vertical_text {
         writing-mode: vertical-rl; /* Vertical text from top to bottom */
-        text-align: center; /* Centers text in the container */
+        text-align: center; 
     }
 
 </style>

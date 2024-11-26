@@ -75,6 +75,7 @@
                             class="px-4 py-[0.5rem] border border-[#232321] rounded mx-1 hover:bg-textCol hover:!text-[white] transitionItem"
                             @click="setPage(i)"
                             :class="i === currentPage ? 'bg-textCol text-white': ''"
+                            v-if="totalPages > 1"
                             >{{ i }}</button>
                         </div>
                         <!-- <span class="item-self-end mx-4">...</span> -->
@@ -158,8 +159,11 @@ const getCurrencySymbol = (currencyCode) => {
 const totalPages = computed(()=>products.value?.totalPages)
 
 const setPage = async(page)=>{
-    currentPage.value = page
-    await handleGetProducts(currentPage.value)
+    scrollToTop()
+    if(page !== currentPage.value){
+        currentPage.value = page
+        await handleGetProducts(currentPage.value)
+    }
 }
 
 const scrollToTop = () => {

@@ -367,9 +367,10 @@
   });
   
   const setPage = async (page) => {
+      scrollToTop();
+    if(page !== currentPage.value){
         if (page < 1 || page > totalPages.value) return;
         currentPage.value = page;
-        scrollToTop();
 
         if (activeCategory.value === "All") {
             await handleGetProducts(currentPage.value, currentCurrency.value);
@@ -384,6 +385,7 @@
             }, 5000);
             isLoading.value = false;
         }
+    }
     };
 
   
