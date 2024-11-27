@@ -11,7 +11,7 @@ export const getCustomer = async () => {
         return res.data
     } catch (error) {
         // catchAxiosError(error)
-        throw error
+        console.log(error)
     }
 }
 
