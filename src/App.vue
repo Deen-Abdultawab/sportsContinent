@@ -10,7 +10,7 @@ const router = useRouter()
 const toast = useToast();
 const store = userStore()
 const { user } = storeToRefs(store)
-const INACTIVITY_TIMEOUT = 10 * 60 * 1000; // 10 minutes in milliseconds
+const INACTIVITY_TIMEOUT = 15 * 60 * 1000; // 10 minutes in milliseconds
 let inactivityTimer;
 
 const clearLocalStorageItems = ()=>{
