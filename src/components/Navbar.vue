@@ -117,7 +117,7 @@
                                         <Counter :default="item?.quantity" @update:initValue="handleUpdatedValue($event, item?.product?.id, item?.id)"/>
                                     </div>
                                     <div class="flex flex-col justify-between">
-                                        <span class="font-openSans font-[400] text-[0.7rem] leading-[1.2rem]">{{ currencyState.symbol }}{{ item?.price?.toLocaleString() }}</span>
+                                        <span class="font-openSans font-[400] text-[0.7rem] leading-[1.2rem]">{{ getCurrencySymbol(item?.product?.currency) }}{{ item?.price?.toLocaleString() }}</span>
                                         <span 
                                         class="font-openSans font-[400] text-[0.7rem] leading-[1.2rem] cursor-pointer"
                                         @click="handleRemoveItem(item?.id)"
@@ -131,7 +131,7 @@
                         <div class="flex w-full items-center gap-[0.25rem] mb-[1.25rem]">
                             <span class="font-openSans text-[1rem] leading-[1.2rem] font-[400]">Subtotal</span>
                             <span class="flex-1 bg-white border border-white h-0"></span>
-                            <span class="font-openSans text-[1rem] leading-[1.2rem] font-[400]">{{ currencyState.symbol }}{{ cartItems?.cart?.total?.toLocaleString() }}</span>
+                            <span class="font-openSans text-[1rem] leading-[1.2rem] font-[400]">{{ getCurrencySymbol(currentCurrency) }}{{ cartItems?.cart?.total?.toLocaleString() }}</span>
                         </div>
                         <button
                         class="primary_btn w-full rounded-[2000px] font-[500] font-openSans text-white text-[1.2rem] leading-[1.8rem] uppercase py-[1rem]"
@@ -169,11 +169,8 @@ const adminStore = useAdminStore()
 const { customer } = storeToRefs(userProfile)
 const { currentCurrency } = storeToRefs(adminStore)
 const cartStore = useCartStore()
-const toast = useToast();
 const store = userStore()
 const { user } = storeToRefs(store)
-const currencyStore = useCurrencyStore()
-const { currencyState } = currencyStore.useCurrency();
 const { cartItems, cartCount } = storeToRefs(cartStore)
 const showNavDropDown = ref(false);
 const showBag = ref(false);
@@ -288,6 +285,19 @@ const handleRemoveItem = async (item_id)=>{
     }
 }
 
+const getCurrencySymbol = (currencyCode) => {
+    switch (currencyCode) {
+        case 'USD':
+        return '$';
+        case 'GBP':
+        return '£';
+        case 'NGN':
+        return '₦';
+        default:
+        return '';
+    }
+};
+
 watch(
   () => cartItems.value?.cart?.items?.length,
   (newLength) => {
@@ -298,8 +308,7 @@ watch(
 
 onMounted( async () => {
     await store.getUser()
-    await userProfile.customerProfile()
-    if(customer.value?.data){
+    if(user.value){
         await cartStore.handleGetCart()
         cartStore.updateCartCount()
         cartLength.value = cartItems.value?.cart?.items?.length
