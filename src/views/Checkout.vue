@@ -35,7 +35,7 @@
                                     <span class="detail">X{{ item?.quantity }}</span>
                                 </div>
                             </div>
-                            <h3 class="detail">{{ currencyState.symbol }}{{ item.price }}</h3>
+                            <h3 class="detail">{{ getCurrencySymbol(item?.product?.currency) }} {{ item.price }}</h3>
                         </div>
                     </article>
                    
@@ -44,7 +44,7 @@
                     <article class="flex w-full items-center gap-[1.15rem] mb-[1.25rem]">
                         <span class="">Subtotal</span>
                         <span class="flex-1 bg-textCol border border-textCol h-0"></span>
-                        <span class="">{{ currencyState.symbol }}{{ cartItems?.cart?.total?.toLocaleString() }}</span>
+                        <span class="">₦ {{ cartItems?.cart?.total?.toLocaleString() }}</span>
                     </article>
                     <article class="flex w-full items-center gap-[1.15rem] mb-[1.25rem]">
                         <span class="">Shipping</span>
@@ -54,7 +54,7 @@
                     <article class="flex w-full items-center gap-[1.15rem] mb-[1.25rem]">
                         <span class="">Total</span>
                         <span class="flex-1 bg-textCol border border-textCol h-0"></span>
-                        <span class="">₦{{ (cartItems?.cart?.total + 8000).toLocaleString() }}</span>
+                        <span class="">₦ {{ (cartItems?.cart?.total + 8000).toLocaleString() }}</span>
                     </article>
                 </div>
             </div>
@@ -169,8 +169,8 @@ const adminStore = useAdminStore()
 const { addresses } = storeToRefs(adminStore)
 const toast = useToast();
 const store = userStore()
-const currencyStore = useCurrencyStore()
-const { currencyState } = currencyStore.useCurrency();
+// const currencyStore = useCurrencyStore()
+// const { currencyState } = currencyStore.useCurrency();
 const cartStore = useCartStore()
 const { cartItems } = storeToRefs(cartStore)
 const { user } = storeToRefs(store)
@@ -296,6 +296,19 @@ const scrollToTop = () => {
         behavior: 'smooth', // Smooth scrolling animation
     });
 };
+
+const getCurrencySymbol = (currencyCode) => {
+      switch (currencyCode) {
+         case 'USD':
+            return '$';
+         case 'GBP':
+            return '£';
+         case 'NGN':
+            return '₦';
+         default:
+            return '';
+      }
+   };
 
 onMounted(async()=>{
     scrollToTop()
