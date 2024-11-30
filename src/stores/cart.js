@@ -14,9 +14,9 @@ export const useCartStore = defineStore('cart', ()=>{
     const cartItems = ref([])
     const cartCount = ref(0)
 
-    const handleGetCart = async ()=>{
+    const handleGetCart = async (currency)=>{
         try {
-            cartItems.value = await getCart()
+            cartItems.value = await getCart(currency)
             return cartItems.value
         } catch (error) {
             console.log(error)

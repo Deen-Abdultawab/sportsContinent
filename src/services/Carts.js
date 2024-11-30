@@ -2,9 +2,9 @@ import axios from "../axios";
 import { catchAxiosError, catchAxiosSuccess } from "./Response"
 import { encrypt, decrypt } from "./Encrypt"
 
-export const getCart = async ()=>{
+export const getCart = async (currency)=>{
     try {
-        let res = await axios.get(`cart`, {}, {
+        let res = await axios.get(`cart?currency=${currency}`, {}, {
             headers: {
                 'Content-Type': 'application/json',
                 "Accept": "application/json"
