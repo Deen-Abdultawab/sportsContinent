@@ -151,7 +151,7 @@
     isCartLoading.value = true
     try {
       let res = await cartStore.handleAddItemToCart(payload)
-      await cartStore.handleGetCart()
+      await cartStore.handleGetCart(currentCurrency.value)
       await cartStore.updateCartCount()
       isCartLoading.value = false
       return res
@@ -171,7 +171,7 @@
           "size": selectedSize.value
         }
         let res = await addToCart(payload)
-        await cartStore.handleGetCart()
+        await cartStore.handleGetCart(currentCurrency.value)
         await cartStore.updateCartCount()
         if(res.statusText == "OK"){
           toast.success("item added to cart successfully", {

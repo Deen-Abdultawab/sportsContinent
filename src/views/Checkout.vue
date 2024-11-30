@@ -35,7 +35,7 @@
                                     <span class="detail">X{{ item?.quantity }}</span>
                                 </div>
                             </div>
-                            <h3 class="detail">{{ getCurrencySymbol(item?.product?.currency) }} {{ item.price }}</h3>
+                            <h3 class="detail">{{ getCurrencySymbol(item?.product?.currency) }} {{ item.price?.toLocaleString() }}</h3>
                         </div>
                     </article>
                    
@@ -44,17 +44,20 @@
                     <article class="flex w-full items-center gap-[1.15rem] mb-[1.25rem]">
                         <span class="">Subtotal</span>
                         <span class="flex-1 bg-textCol border border-textCol h-0"></span>
-                        <span class="">₦ {{ cartItems?.cart?.total?.toLocaleString() }}</span>
+                        <span class="">{{ getCurrencySymbol(currentCurrency) }} {{ cartItems?.cart?.total?.toLocaleString() }}</span>
                     </article>
                     <article class="flex w-full items-center gap-[1.15rem] mb-[1.25rem]">
                         <span class="">Shipping</span>
                         <span class="flex-1 bg-textCol border border-textCol h-0"></span>
-                        <span class="">₦ 8,000</span>
+                        <span class="" v-if="currentCurrency !== 'NGN'"> 0 </span>
+                        <span class="" v-else>{{ getCurrencySymbol(currentCurrency) }} 8,000</span>
+                        
                     </article>
                     <article class="flex w-full items-center gap-[1.15rem] mb-[1.25rem]">
                         <span class="">Total</span>
                         <span class="flex-1 bg-textCol border border-textCol h-0"></span>
-                        <span class="">₦ {{ (cartItems?.cart?.total + 8000).toLocaleString() }}</span>
+                        <span class="" v-if="currentCurrency === 'NGN'">{{ getCurrencySymbol(currentCurrency) }} {{ (cartItems?.cart?.total + 8000)?.toLocaleString() }}</span>
+                        <span class="" v-else>{{ getCurrencySymbol(currentCurrency) }} {{ (cartItems?.cart?.total)?.toLocaleString() }}</span>
                     </article>
                 </div>
             </div>
@@ -156,9 +159,8 @@ import Footer from '@/components/Footer.vue';
 import { useRouter } from 'vue-router';
 import { userStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref, watch } from 'vue';
 import { useCartStore } from '@/stores/cart';
-import { useCurrencyStore } from '@/stores/currency';
 import Loader from "@/components/Loader/WhiteLoader.vue"
 import loader from "@/components/Loader/Loader.vue"
 import { useToast } from "vue-toastification";
@@ -166,11 +168,9 @@ import { useAdminStore } from "@/stores/admin"
 
 
 const adminStore = useAdminStore()
-const { addresses } = storeToRefs(adminStore)
+const { addresses, currentCurrency } = storeToRefs(adminStore)
 const toast = useToast();
 const store = userStore()
-// const currencyStore = useCurrencyStore()
-// const { currencyState } = currencyStore.useCurrency();
 const cartStore = useCartStore()
 const { cartItems } = storeToRefs(cartStore)
 const { user } = storeToRefs(store)
@@ -239,7 +239,7 @@ const handleCheckout = async () => {
 
         const match = findMatchingAddress(sortedAddresses.value, comparisonObject);
         cartId.value = match ? match : cartId.value;
-        const payload = sortedAddresses.value?.length > 0
+        const payload = match
             ? { cartId: cartId.value, addressId: addressId.value }
             : {
                 cartId: cartId.value,
@@ -253,6 +253,7 @@ const handleCheckout = async () => {
                 orderId: res.data?.order?.id,
                 email: formData.email,
                 amount: res.data?.order?.total,
+                currency: currentCurrency.value
             };
             const paymentRes = await adminStore.handleMakePayments(paymentPayload);
 
@@ -310,17 +311,34 @@ const getCurrencySymbol = (currencyCode) => {
       }
    };
 
-onMounted(async()=>{
-    scrollToTop()
-    await store.getUser()
-    await cartStore.handleGetCart()
-    await adminStore.handleGetAddresses()
-    cartId.value = cartItems.value?.cart?.id
-    if(addresses.value?.addresses?.length > 0){
-        sortedAddresses.value = [...addresses.value?.addresses].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+   const setUpPage = async ()=>{
+    isPageLoading.value = true 
+    try {
+        scrollToTop()
+        await store.getUser()
+        await cartStore.handleGetCart(currentCurrency.value)
+        await adminStore.handleGetAddresses()
+        cartId.value = cartItems.value?.cart?.id
+        if(addresses.value?.addresses?.length > 0){
+            sortedAddresses.value = [...addresses.value?.addresses].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        }
+        billingAddress.value = sortedAddresses.value[0]
+        autoFillAddress()
+        isPageLoading.value = false
+    } catch (error) {
+        console.log(error)
+        isPageLoading.value = false
     }
-    billingAddress.value = sortedAddresses.value[0]
-    autoFillAddress()
+   }
+
+   watch(
+        () => currentCurrency.value, async (newCurrency, oldCurrency) => {
+           await setUpPage();
+        }
+    );
+
+onMounted(async()=>{
+   await setUpPage()
 })
    
 </script>

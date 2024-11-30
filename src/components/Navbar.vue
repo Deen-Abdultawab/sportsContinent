@@ -177,12 +177,15 @@ const showBag = ref(false);
 const router = useRouter()
 const route = useRoute()
 const isRemoving = ref(false)
+const isChangingCurrency = ref(false)
 const cartLength = ref(0)
 
 const handleCurrencyChange =async () => {
-  await adminStore.updateCurrency(currentCurrency.value)
-  localStorage.setItem('currency', currentCurrency.value);
-  handleCloseNavDrop()
+    await adminStore.updateCurrency(currentCurrency.value)
+    await cartStore.handleGetCart(currentCurrency.value)
+    localStorage.setItem('currency', currentCurrency.value);
+    // handleCloseNavDrop()
+    showNavDropDown.value = false
 };
 
 const handleLogout = async () =>{
@@ -259,10 +262,10 @@ const handleUpdatedValue = async (newValue, item_id, id) => {
         }
         try {
             await cartStore.handleUpdateCart(item_id, payload)
-            await cartStore.handleGetCart()
+            await cartStore.handleGetCart(currentCurrency.value)
             await cartStore.updateCartCount()
             isRemoving.value = false
-            handleCloseBag()
+            // handleCloseBag()
         } catch (error) {
             console.log(error)
             isRemoving.value = false
@@ -276,7 +279,7 @@ const handleRemoveItem = async (item_id)=>{
     isRemoving.value = true
     try {
         await cartStore.handleDeleteCartItem(item_id)
-        await cartStore.handleGetCart()
+        await cartStore.handleGetCart(currentCurrency.value)
         await cartStore.updateCartCount()
         isRemoving.value = false
     } catch (error) {
@@ -309,7 +312,7 @@ watch(
 onMounted( async () => {
     await store.getUser()
     if(user.value){
-        await cartStore.handleGetCart()
+        await cartStore.handleGetCart(currentCurrency.value)
         cartStore.updateCartCount()
         cartLength.value = cartItems.value?.cart?.items?.length
     }
