@@ -221,8 +221,11 @@
   };
 
   watch(currentCurrency, async (newCurrency) => {
+    isLoading.value = true
     await adminStore.updateCurrency(newCurrency);
+    await handleGetFeaturedProducts()
     await handleGetSingleProduct(route.params.slug, currentCurrency.value)
+    isLoading.value = false
   });
 
   onMounted(async()=>{
